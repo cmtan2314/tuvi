@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tự kiểm cả skill trong vài giây: index, tra, lập lá số, 30 phép thử an sao.
+"""Tự kiểm cả skill: index, tra, lập lá số, engine Bắc phái + đối chiếu, 30 phép thử an sao.
 In 'SKILL OK' nếu mọi thứ chạy; nếu không, in đúng chỗ hỏng và cách sửa.
 
   python3 scripts/kiemtra        (chạy từ thư mục skill, hoặc dùng đường dẫn đầy đủ tới file này)
@@ -40,6 +40,14 @@ run("laso.py lập lá số", [PY, str(S / "laso.py"), "--ngay", "18", "--thang"
                           "--gio", "17"], "Mệnh tại Tỵ")
 run("laso.py khung luận + quét hạn", [PY, str(S / "laso.py"), "--ngay", "14", "--thang", "5", "--nam", "2001",
                                    "--gio", "18", "--namxem", "2026", "--quet", "3"], "L.Kình Dương ở đại hạn")
+import engine  # noqa: E402
+ok, why = engine.san_sang()
+if ok:
+    run("engine Bắc phái (đắc hãm) chạy được", [PY, str(S / "laso.py"), "--engine", "bacphai", "--ngay", "14",
+                                             "--thang", "5", "--nam", "2001", "--gio", "18", "--gon"], "Đà La(hãm)")
+    run("đối chiếu engine JS ↔ Python (20 lá số)", [PY, str(S / "doichieu.py"), "20"], "ĐỐI CHIẾU OK")
+else:
+    print(f"CHÚ Ý engine Bắc phái không chạy: {why} -> laso.py tự dùng Python theo sách, KHÔNG có đắc hãm")
 run("test_laso.py (an sao khớp sách)", [PY, str(S / "test_laso.py")], "TẤT CẢ ĐÚNG")
 
 print("SKILL OK" if not bad else f"SKILL HỎNG: {', '.join(bad)}")

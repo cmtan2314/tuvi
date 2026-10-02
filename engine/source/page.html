@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>An sao Trung Châu Lý Số</title>
+
+
+    //<link href="tcp.css" rel="stylesheet" type="text/css">
+    <meta name="keywords" content="An sao, Trung Châu Lý Số">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="js/jquery.easydropdown.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="themes/easydropdown.css"/>
+
+</head>
+
+<body>
+
+
+
+    <globalization responseencoding="utf-8"></globalization>
+    <div id="background">
+        <div id="templatemo_wrapper">templatemo_wrapper
+            <div id="templatemo_header"> templatemo_header </div>
+
+            <!-- END of -->
+            <div id="templatmeo_menu">
+                <ul>
+
+                    templatmeo_menu
+                    <div id="site_title">site_title </div>
+
+                </ul>
+
+            </div>
+
+            <!-- END of -->
+            <div id="templatemo_main">
+                <div align="center"> templatemo_main </div>
+
+                <div id="home" class="main_box"> main_box
+                    <p>Lá số gốc
+                        <canvas id="myCanvas" width="1205" height="685" style="display: none;"></canvas>
+                    </p>
+
+                    <h1 style="" align="center"> Bắc Phái Tử Vi Đẩu Số
+</h1> &nbsp; ==========================================================Sản phẩm chính=================================================
+                    <hr>
+					
+					
+					
+				
+                    <script src="convertlich.js" type="text/javascript"></script>
+                    <form name="form1" method="post" action="">
+                        <p>
+                            <label for="ID_TEN"></label>Tên
+                            <label for="ID_TEN"></label>
+                            <input name="ID_TEN" value="Nhóm TCLS" class="dropdown" id="ID_TEN" onchange="setup()" type="text">&nbsp;&nbsp; &nbsp;&nbsp; Chọn Dương hay Âm Lịch:
+                            <label for="ID_LICH"></label>
+                            <select name="ID_LICH" class="dropdown" onchange="ShowHideObject(this.options[this.selectedIndex].value)" id="ID_LICH">
+                                <option value="1" selected="selected"> Dương Lịch
+                                </option>
+                                <option value="0"> Âm Lịch </option>
+                            </select>
+                            <script>
+                                var start = new Date();
+                                // CODE
+                            </script>
+                            &nbsp;&nbsp;&nbsp; </p>
+
+                        <fieldset id="idLich_1">
+                            <legend> Dương Lịch </legend>
+                            <table style="text-align: left; width: 1175px; height: 86px;" border="1" cellpadding="2" cellspacing="2">
+
+                                <tbody>
+
+                                    <tr>
+
+                                        <td></td>
+
+                                        <td>Năm</td>
+
+                                        <td>Tháng</td>
+
+                                        <td>Ngày</td>
+
+                                        <td>Giờ</td>
+
+                                        <td></td>
+
+                                    </tr>
+
+                                    <tr>
+
+                                        <td style="width: 140px;">Giới tính:
+                                            <label for="ID_GIOITINH"></label>
+                                            <select name="ID_GIOITINH" id="ID_GIOITINH" class="dropdown" onchange="setup()">
+											  
+                                                <option value="1" selected="selected"> Nam </option>
+                                                <option value="0"> Nữ </option>
+                                            </select>
+
+                                        </td>
+
+                                        <td style="width: 150px;">Năm
+                                            <label for="ID_NAMDL"></label>
+                                            <select name="ID_NAMDL" id="ID_NAMDL" class="dropdown" onchange="ChangeNgay()">
+                                            </select>
+
+                                        </td>
+
+                                        <td style="width: 150px;"> Tháng
+                                            <label for="ID_THANGDL"></label>
+                                            <select name="ID_THANGDL" id="ID_THANGDL" class="dropdown" onchange="ChangeNgay()">
+                                            </select>
+
+                                        </td>
+
+                                        <td style="width: 140px;">Ngày
+                                            <label for="ID_NGAYDL"></label>
+                                            <select name="ID_NGAYDL" id="ID_NGAYDL" class="dropdown" onchange="ChangeNgay()">
+                                            </select>
+
+                                        </td>
+
+                                        <td style="width: 140px;"> Giờ
+                                            <label for="ID_GIODL"></label>
+                                            <select name="ID_GIODL" id="ID_GIODL" class="dropdown" onchange="setup()">
+                                                <option value="0"> 0h giờ Tý</option>
+                                                <option value="1"> 1h giờ Sửu</option>
+                                                <option value="2"> 2h giờ Sửu</option>
+                                                <option value="3"> 3h giờ Dần</option>
+                                                <option value="4"> 4h giờ Dần </option>
+                                                <option value="5"> 5h giờ Mão</option>
+                                                <option value="6"> 6h giờ Mão</option>
+                                                <option value="7"> 7h giờ Thìn </option>
+                                                <option value="8"> 8h giờ Thìn</option>
+                                                <option value="9"> 9h giờ Tỵ </option>
+                                                <option value="10"> 10h giờ Tỵ</option>
+                                                <option value="11"> 11h giờ Ngọ</option>
+                                                <option value="12"> 12h giờ Ngọ</option>
+                                                <option value="13"> 13h-1h chiều giờ Mùi </option>
+                                                <option value="14"> 14h-2h chiều giờ Mùi</option>
+                                                <option value="15"> 15h-3h chiều giờ Thân</option>
+                                                <option value="16"> 16h-4h chiều giờ Thân</option>
+                                                <option value="17"> 17h-5h chiều giờ Dậu</option>
+                                                <option value="18"> 18h-6h chiều giờ Dậu</option>
+                                                <option value="19"> 19h-7h tối giờ Tuất</option>
+                                                <option value="20"> 20h-8h tối giờ Tuất</option>
+                                                <option value="21"> 21h-9h tối giờ Hợi </option>
+                                                <option value="22"> 22h-10h đêm giờ Hợi </option>
+                                                <option value="23"> 23h-11h giờ Tý hôm sau</option>
+                                            </select>
+
+                                        </td>
+
+                                        <td style="width: 140px;">Phút
+                                            <label for="ID_PHUTDL"></label>
+                                            <select name="ID_PHUTDL" id="ID_PHUTDL" class="dropdown" onchange="setup()">
+                                            </select>
+
+                                            <p></p>
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+
+                            &nbsp;
+                            <br>
+
+                        </fieldset>
+
+                        <fieldset id="idLich_0" style="display: none;">
+                            <legend>
+                                Âm Lịch </legend>
+
+
+                            <table style="text-align: left; width: 1175px; height: 86px;" border="1" cellpadding="2" cellspacing="2">
+
+                                <tbody>
+
+                                    <tr>
+
+                                        <td></td>
+
+                                        <td>Năm</td>
+
+                                        <td>Tháng</td>
+
+                                        <td>Ngày</td>
+
+                                        <td>Giờ</td>
+
+                                        <td></td>
+
+                                    </tr>
+
+                                    <tr>
+
+                                        <td style="width: 140px;">Giới tính:
+                                            <label for="ID_GIOITINH"></label>
+                                            <select name="ID_GIOITINH" id="ID_GIOITINH" class="dropdown" onchange="setup()">
+                                                <option value="1" selected="selected"> Nam </option>
+                                                <option value="0"> Nữ </option>
+                                            </select>
+
+                                        </td>
+
+                                        <td style="width: 150px;">Năm âm&nbsp;
+                                            <label for="ID_NAM"></label>
+                                            <select name="ID_NAM" id="ID_NAM" class="dropdown" onchange="ChangeNgay()">
+                                                <option value="1980"> 1980</option>
+                                            </select>
+
+                                        </td>
+
+                                        <td style="width: 150px;"> &nbsp;Tháng Âm
+                                            <label for="ID_THANG"></label>
+                                            <select name="ID_THANG" id="ID_THANG" class="dropdown" onchange="setup()">
+                                            </select>
+
+                                            <input name="ID_NHUAN" id="ID_NHUAN" class="checkbox checkbox-primary" unchecked="" onchange="setup()" type="checkbox">
+                                            <label for="ID_NHUAN"></label> nhuận
+                                        </td>
+
+                                        <td style="width: 140px;">Ngày Âm
+                                            <label for="ID_NGAY"></label>
+                                            <select name="ID_NGAY" id="ID_NGAY" class="dropdown" onchange="setup()">
+                                            </select>
+
+                                        </td>
+
+                                        <td style="width: 140px;">
+                                            <p>Giờ âm
+                                                <label for="ID_GIO"></label>
+                                                <select name="ID_GIO" id="ID_GIO" class="dropdown" onchange="setup()">
+                                                </select>
+
+                                            </p>
+
+                                        </td>
+
+                                        <td style="width: 140px;">
+                                            <br> Phút
+                                            <label for="ID_PHUTAL"></label>
+                                            <select name="ID_PHUT" id="ID_PHUT" class="dropdown" onchange="setup()">
+                                            </select>
+
+                                            <p></p>
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                            <br>
+
+                        </fieldset>
+
+
+
+
+
+                        <table style="text-align: left; width: 1175px; height: 86px;" border="1" cellpadding="2" cellspacing="2">
+                            <tbody>
+
+<!-- Rounded TWO -->
+
+                                <td>
+                                    <input name="ID_LUUDAIVAN" id="ID_LUUDAIVAN" class="roundedOne" checked="checked" onchange="setup()" type="checkbox">
+                                    <label for="ID_LUUDAIVAN"></label> Xem vận mười năm &nbsp;&nbsp;
+                                </td>
+
+                                <td>
+                                    <input name="ID_LUUNIEN" id="ID_LUUNIEN" class="roundedOne" checked="checked" onchange="setup()" type="checkbox">
+                                    <label for="ID_LUUNIEN"></label> Vận từng năm
+                                    <label for="ID_NAMXEM"></label>
+                                    <select name="ID_NAMXEM" id="ID_NAMXEM" class="dropdown" onchange="setup()">
+                                    </select>
+
+                                </td>
+
+                                <td>
+                                    <input name="ID_LUUNGUYET" size="5" id="ID_LUUNGUYET" class="squaredOne" onchange="setup()" checked="checked" type="checkbox">
+                                    <label for="ID_LUUNGUYET"></label>Vận tháng (Nv.)
+                                    <label for="ID_THANGXEM"></label>
+                                    <select name="ID_THANGXEM" id="ID_THANGXEM" class="dropdown" onchange="setup()">
+                                    </select>
+ </td>
+
+                                <td>
+
+                                    <input name="ID_THANGXEMNHUAN" id="ID_THANGXEMNHUAN" class="squaredOne" unchecked="" onchange="setup()" type="checkbox">
+                                    <label for="ID_THANGXEMNHUAN"></label> nhuận </td>
+
+                                <td>
+                                    <input name="ID_LUUNHAT" id="ID_LUUNHAT" class="squaredOne" checked="checked" onchange="setup()" type="checkbox">
+                                    <label for="ID_LUUNHAT"></label>
+                                    <label for="ID_LUUNHAT">
+                                        Vận ngày </label>
+                                    <select name="ID_NGAYXEM" id="ID_NGAYXEM" class="dropdown" onchange="setup()">
+                                    </select>
+
+                                </td>
+
+                                <td>
+                                    <input name="ID_LUUTHOI" id="ID_LUUTHOI" class="squaredOne" onchange="setup()" checked="checked" type="checkbox">
+                                    <label for="ID_LUUTHOI"></label> Vận giờ
+                                    <label for="ID_GIOXEM"></label>
+                                    <select name="ID_GIOXEM" id="ID_GIOXEM" class="dropdown" onchange="setup()">
+                                        <option value="0"> 0h giờ Tý</option>
+                                        <option value="1"> 1h giờ Sửu</option>
+                                        <option value="2"> 2h giờ Sửu</option>
+                                        <option value="3"> 3h giờ Dần</option>
+                                        <option value="4"> 4h giờ Dần </option>
+                                        <option value="5"> 5h giờ Mão</option>
+                                        <option value="6"> 6h giờ Mão</option>
+                                        <option value="7"> 7h giờ Thìn </option>
+                                        <option value="8"> 8h giờ Thìn</option>
+                                        <option value="9"> 9h giờ Tỵ </option>
+                                        <option value="10"> 10h giờ Tỵ</option>
+                                        <option value="11"> 11h giờ Ngọ</option>
+                                        <option value="12"> 12h giờ Ngọ</option>
+                                        <option value="13"> 13h-1h chiều giờ Mùi </option>
+                                        <option value="14"> 14h-2h chiều giờ Mùi</option>
+                                        <option value="15"> 15h-3h chiều giờ Thân</option>
+                                        <option value="16"> 16h-4h chiều giờ Thân</option>
+                                        <option value="17"> 17h-5h chiều giờ Dậu</option>
+                                        <option value="18"> 18h-6h chiều giờ Dậu</option>
+                                        <option value="19"> 19h-7h tối giờ Tuất</option>
+                                        <option value="20"> 20h-8h tối giờ Tuất</option>
+                                        <option value="21"> 21h-9h tối giờ Hợi </option>
+                                        <option value="22"> 22h-10h đêm giờ Hợi </option>
+                                        <option value="23"> 23h-11h giờ Tý hôm sau</option>
+                                    </select>
+                                </td>
+                                <td>vận khắc</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+
+                        <h3 align="center"> <label for="ID_THONGTIN"></label><label for="ID_THONGTIN"> <input name="ID_THONGTIN" value="Thông tin thêm" class="dropdown" size="80" id="ID_THONGTIN" onchange="setup()" type="text">
+  </label> </h3>
+
+                    </form>
+
+                    <script src="sinhlist.js" type="text/javascript"></script>
+
+                    // Chạy chương trình sinh list năm tháng ngày giờ dương lịch và âm lịch.
+
+
+                    <br>
+
+                    <p> </p>
+
+                    <fieldset>
+                        <legend> Tùy chọn nâng cao </legend>
+                        &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                        <br>
+
+                        <input value="Nhập thêm sao" onclick="toggle()" style="height: 55px; width: 140px;" type="button">
+                        <div id="toggleText" style="display: none;">
+                            <label for="ID_SAO"></label>
+                            <input name="ID_SAO" value="tên sao 1" id="ID_SAO" maxlength="15" size="15" type="text">
+                            <label for="ID_VITRI"></label>
+                            <select name="ID_VITRI" id="ID_VITRI" onchange="setup()">
+                                <option value="0" selected="selected"> Không an </option>
+                            </select>
+
+                            &nbsp;&nbsp; &nbsp;&nbsp;
+                            <label for="ID_SAO1"></label>
+                            <input name="ID_SAO1" value="tên sao 2" id="ID_SAO1" maxlength="15" size="15" onchange="setup()" type="text">
+                            <label for="ID_VITRI1"></label>
+                            <select name="ID_VITRI1" id="ID_VITRI1" onchange="setup()">
+                                <option value="0" selected="selected"> Không an </option>
+                            </select>
+
+                            &nbsp;&nbsp; &nbsp;&nbsp;
+                            <br>
+
+                            <label for="ID_SAO2"></label>
+                            <input name="ID_SAO2" value="tên sao 3" id="ID_SAO2" maxlength="15" size="15" onchange="setup()" type="text">
+                            <label for="ID_VITRI2"></label>
+                            <select name="ID_VITRI2" id="ID_VITRI2" onchange="setup()">
+                                <option value="0" selected="selected"> Không an </option>
+                            </select>
+
+                            &nbsp;&nbsp; &nbsp;&nbsp;
+                            <label for="ID_SAO3"></label>
+                            <input name="ID_SAO3" value="tên sao 4" id="ID_SAO3" maxlength="15" size="15" onchange="setup()" type="text">
+                            <label for="ID_VITRI3"></label>
+                            <select name="ID_VITRI3" id="ID_VITRI3" onchange="setup()">
+                                <option value="0" selected="selected"> Không an </option>
+                            </select>
+
+                            <label for="ID_CANNAMTHEM"></label> Tứ hóa 1
+                            <select name="ID_CANNAMTHEM" value="8" id="ID_CANNAMTHEM" onchange="setup()">
+                                <option value="0" selected="selected"> Không an </option>
+                            </select>
+
+                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                            <label for="ID_CANNAMTHEM1"></label> Tứ hóa 2
+                            <select name="ID_CANNAMTHEM1" value="8" id="ID_CANNAMTHEM1" onchange="setup()">
+                                <option value="0" selected="selected"> Không an </option>
+                            </select>
+
+                            <p>
+                                <label for="CHUGIAI"></label>
+                                <input name="CHUGIAI" value=" " id="CHUGIAI" maxlength="350" size="15" onchange="setup()" type="text"> &nbsp;&nbsp; &nbsp;&nbsp;Chú giải </p>
+
+                        </div>
+
+                        <br>
+
+                        <table style="text-align: left; margin-left: auto; margin-right: auto;" id="customers">
+
+                            <tbody>
+
+                                <tr>
+
+                                    <td>
+                                        <input name="ID_TAPDIEU" id="ID_TAPDIEU" class="squaredOne" checked="checked" onchange="setup()" type="checkbox">
+                                        <label for="ID_TAPDIEU"></label> An tạp diệu </td>
+
+                                    <td>
+                                        <input name="ID_THAITUE" id="ID_THAITUE" class="squaredOne" checked="checked" onchange="setup()" type="checkbox">
+                                        <label for="ID_THAITUE"></label> An vòng Thái Tuế Bác Sĩ </td>
+
+                                    <td>
+                                        <input name="ID_TUONGTINH" id="ID_TUONGTINH" class="squaredOne"checked="checked" onchange="setup()" type="checkbox">
+                                        <label for="ID_TUONGTINH"></label> An vòng Tướng Tinh </td>
+
+                                    <td>
+                                        <input name="ID_PHIEUPHIEU" size="5" id="ID_PHIEUPHIEU" class="squaredOne"checked="checked"  onchange="setup()" type="checkbox">
+                                        <label for="ID_PHIEUPHIEU"></label> An Phi Hóa
+                                        <input name="ID_VEPHIEUPHIEU" size="5" id="ID_VEPHIEUPHIEU" class="squaredOne"  unchecked=""  onchange="setup()" type="checkbox">
+                                        <label for="ID_VEPHIEUPHIEU"></label> Đồ họa
+                                        <input name="ID_VEPHIEUPHIEUVAN" size="5" id="ID_VEPHIEUPHIEUVAN" class="squaredOne" unchecked="" onchange="setup()" type="checkbox">
+                                        <label for="ID_VEPHIEUPHIEUVAN"></label>Theo vận </td>
+
+                                    <td>
+                                        <label for="ID_DIABAN"></label>
+                                        <select name="ID_DIABAN" id="ID_DIABAN" onchange="setup()">
+                                            <option value="0"> Lá số mặc định </option>
+                                            <option value="1"> Lá số địa bàn </option>
+                                            <option value="2"> Lá số nhân bàn</option>
+                                        </select>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                        &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                        <label for="ID_VDTTL"></label>
+                        An tứ hóa
+                        <select name="ID_VDTTL" id="ID_VDTTL" onchange="setup()">
+                            <option value="0"> An Mậu Nhật hóa Khoa, Canh và Nhâm Thiên Phủ hóa Khoa </option>
+                            <option value="1" selected="selected">An Mậu Hữu Bật Hóa Khoa, Canh Thái Âm hóa Khoa, Nhâm Tả Phù hóa Khoa </option>
+                        </select>
+
+                        <br> Cách an sao Hỏa Linh
+                        <label for="ID_VDTTLHL"></label>
+                        <select name="ID_VDTTLHL" id="ID_VDTTLHL" onchange="setup()">
+                            <option value="0"> An theo TCP-Hỏa Linh an thuận</option>
+                            <option value="1">An theo VDTTL-Hỏa Linh an theo Âm Nam Dương nữ</option>
+                        </select>
+
+                    </fieldset>
+
+                    <p></p>
+
+
+
+
+                    <h3 align="center">
+<div align="center"> <input value="1000" min="500" max="1500" step="50" id="ID_size" onchange="resize()" type="range"> </div>
+
+</h3>
+
+                    <label for="ID_size"></label>
+                    <br>
+
+
+
+
+                    <script src="selectedate.js" type="text/javascript">
+                        //Nhập dữ liệu ngày sinh
+                    </script>
+
+
+                    <script>
+					
+                        // Chạy chương trình check list ngày.
+                        function ChangeListNgay(tngay) {
+
+                            var listngay = document.getElementById('ID_NGAYDL');
+
+
+                            var len = listngay.options.length;
+                            var newngay = len;
+                            if (len < tngay) {
+                                for (i = 1; i <= (tngay - len); i++) {
+                                    newngay++;
+                                    var temp = newngay.toString();
+                                    var optnew = document.createElement('option');
+                                    optnew.value = temp;
+                                    optnew.text = temp;
+                                    try {
+                                        listngay.add(optnew, null);
+                                    } catch (e) {
+                                        listngay.add(optnew);
+                                    }
+                                }
+                            } else if (len > tngay) {
+                                for (i = 1; i <= (len - tngay); i++) {
+                                    listngay.remove(listngay.length - 1);
+                                }
+                            }
+                            setup();
+							
+                        }
+
+                        function ChangeNgay() {
+
+                            var listthang = document.getElementById('ID_THANGDL');
+                            var listnam = document.getElementById('ID_NAMDL');
+                            var nam;
+                            var thang;
+                            var lennam = listnam.options.length;
+                            var lenthang = listthang.options.length;
+                            for (i = 0; i < lennam; i++) {
+                                if (listnam.options[i].selected)
+                                    nam = parseInt(listnam.options[i].value);
+                            }
+
+                            for (i = 0; i < lenthang; i++) {
+                                if (listthang.options[i].selected)
+                                    thang = parseInt(listthang.options[i].value);
+                            }
+
+                            var ngay;
+                            if (thang == 1 || thang == 3 || thang == 5 || thang == 7 || thang == 8 || thang == 10 || thang == 12)
+                                ngay = 31;
+                            else if (thang == 2) {
+                                if (nam % 4 == 0) {
+                                    ngay = 29;
+                                } else ngay = 28;
+                            } else ngay = 30;
+
+							
+
+							
+                            ChangeListNgay(ngay);
+
+                        }
+
+
+                        addcung("ID_VITRI");
+                        addcung("ID_VITRI1");
+                        addcung("ID_VITRI2");
+                        addcung("ID_VITRI3");
+                    </script>
+
+
+
+
+
+                    <button onclick="bacot()" class="button button-blue" style="height: 25px; width: 150px;">An Sao ba cột
+                    </button>
+                    <button onclick="ngaygioxem()" class="button button-blue" style="height: 25px; width: 150px;">Thời điểm hiện tại
+                    </button>
+                    <button onclick="window.open('http://imgur.com/')" class="button button-blue" style="height: 25px; width: 250px;">Upload lá số lên website
+                    </button>&nbsp;&nbsp;
+                    <br>
+
+                    <br>
+
+                    <fieldset>
+                        <legend>
+                        <h1>Lá số Thiên Bàn</h1></legend>
+                    <img id="canvasImg">
+<canvas id="e" width="177" height="113"></canvas>
+                    </fieldset>
+
+                    <br>
+
+                    <br>
+
+                    <fieldset>
+                        <legend>
+					<h1>Lá số Địa Bàn</h1>
+					
+					</legend>
+                    <img id="canvasImg2">
+
+                    </fieldset>
+
+                    <br>
+
+                    <br>
+
+                    <fieldset>
+                        <legend>
+                        <h1>Lá số Nhân Bàn</h1></legend>
+						                    <img id="canvasImg3">
+
+                    </fieldset>
+
+                    <br>
+
+                    <br>
+
+                    <fieldset>
+                        <legend>
+					<h1>Lá số Tứ Trụ</h1></legend>
+                    <img id="canvasImg4">
+
+                    </fieldset>
+
+                    <br>
+
+                    <br>
+
+                    <fieldset>
+                        <legend>    <h1>Lục nhâm Đại Độn</h1></legend>
+                    
+                    <img id="canvasImg5">
+
+                    </fieldset>
+
+                    <br>
+
+                    <br>
+
+                    <fieldset>
+                        <legend>
+                        <h1>Kỳ Môn Độn Giáp</h1></legend>
+
+                    </fieldset>
+
+                    <img id="canvasImg6">
+                    <br>
+
+                    <br>
+
+                    <fieldset>
+                        <legend>
+                        <h1>Lục Hào và Mai Hoa Dịch Số</h1>
+					</legend>
+                    </fieldset>
+
+                    <img id="canvasImg7">
+                    <br>
+
+                    <br>
+
+                    <canvas id="myCanvas2" width="1220" height="980" style="display: none;"></canvas>
+
+
+
+
+                    <script src="bacotdoc.js" type="text/javascript"></script>
+
+
+                    <script type="text/javascript">
+                        function saveImage() {
+                            var ua = window.navigator.userAgent;
+                            if (ua.indexOf("Chrome") > 0) {
+                                // save image without file type
+                                var canvas = document.getElementById("canvas");
+                                document.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                                // save image as png
+                                var link = document.createElement('a');
+                                link.download = "test.png";
+                                link.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");;
+                                link.click();
+                            } else {
+                                alert("Please use Chrome");
+                            }
+                        }
+                    </script>
+
+                    <img id="canvasImg3">Bạn nhấn chuột phải vào lá số, chọn Save Image As để lưu lá số. Sau đó, có thể vào http://imgur.com để upload lá số lên mạng.
+                    <p>==========================================================Hết nhập, an lá số =================================================</p>
+
+                    <p></p>
+
+                    <br>
+
+                </div>
+
+                <p>
+
+
+                    <br>
+
+
+
+                    <script>
+	
+                        //Sinh ra list nam xem
+                        for (var i = 1800; i < 2100; ++i) addlist(i, i, "ID_NAMXEM");
+
+                        for (var i = 1; i <= 12; ++i) addlist(i, i, "ID_THANGXEM");
+
+                        for (var i = 1; i <= 30; ++i) addlist(i, i, "ID_NGAYXEM");
+				
+                    </script>
+
+
+                    <script>
+                        //Set ngày xem là ngày hôm nay. Theo âm lịch
+                        var today = new Date();
+                        var dd = today.getDate();
+                        var hh = today.getHours();
+                        if (hh > 23) {
+                            hh = 0;
+                            dd = dd + 1
+                        }
+                        var mm = today.getMonth() + 1; //January is 0!
+                        var yyyy = today.getFullYear();
+                        var ngaygioam = convertSolar2Lunar(dd, mm, yyyy, 7.0);
+
+                        document.getElementById("ID_NAMXEM").selectedIndex = 0;
+                        document.getElementById("ID_NAMXEM").value = parseInt(ngaygioam[2]);
+                        document.getElementById("ID_THANGXEM").selectedIndex = 0;
+                        document.getElementById('ID_THANGXEM').value = parseInt(ngaygioam[1]);
+                        document.getElementById("ID_NGAYXEM").selectedIndex = 0;
+                        document.getElementById('ID_NGAYXEM').value = parseInt(ngaygioam[0]);
+                        document.getElementById("ID_GIOXEM").selectedIndex = 0;
+                        document.getElementById("ID_GIOXEM").value = Math.floor(hh);
+
+
+
+                        var xemnhuan = parseInt(ngaygioam[3]);
+                        if (xemnhuan == 1)
+                            document.getElementById("ID_THANGXEMNHUAN").checked = true;
+                        else document.getElementById("ID_THANGXEMNHUAN").checked = false;
+                    </script>
+
+
+
+
+
+                    <script src="sharefunctions.js" type="text/javascript"></script>
+                    //Nhập các biến dùng chung, show, hide các thứ
+                    <script src="xulydulieu.js" type="text/javascript"></script>              
+						//Nhap du lieu
+						
+                </p>
+                <script src="tutrufunction.js" type="text/javascript"></script>
+                <script src="tutru.js" type="text/javascript"></script>
+
+				<script>setup();
+				</script>
+                <div align="center">main_box &nbsp;
+                </div>
+                <!-- END of home -->
+            </div>
+
+	
+			
+
+            <!-- END of contact -->
+        </div>
+
+        <div id="templatemo_footer"></div>
+
+        <!-- END of -->
+    </div>
+
+</body>
+
+</html>

@@ -471,6 +471,44 @@ def luu_nien(xc, xz, pos, tu_hoa):
     return {k: m12(v) for k, v in L.items()}
 
 
+def ap_engine(r, e):
+    """Lấy vị trí sao + độ sáng từ engine Bắc phái (scripts/engine.py) đè lên lá số Python.
+    Python phải được lập cùng quy ước (Hỏa Linh cùng chiều, Canh Khoa Âm Kỵ Đồng, nhuận = tháng chính).
+    Khung (Mệnh, Thân, cục, đại/tiểu hạn) phải khớp; không khớp -> lỗi, không đoán."""
+    import engine as E
+    R = r["_raw"]
+    pe = E.vi_tri(e)
+    menh_e = next(p for p, c in e["cung"].items() if c["chuc"].upper().startswith("MỆNH"))
+    if menh_e != r["menh"] or pe.get("Tử Vi", (None,))[0] != r["sao"]["Tử Vi"]:
+        raise RuntimeError(f"engine lệch khung: Mệnh {CHI[menh_e]} vs {CHI[r['menh']]}")
+    lech = {}
+    for ten, (p, _) in pe.items():
+        if ten in r["sao"] and r["sao"][ten] != p:
+            lech[ten] = (r["sao"][ten], p)
+        r["sao"][ten] = p
+    r["sang"] = {ten: s for ten, (_, s) in pe.items() if s}
+    r["lech_quy_uoc"] = lech  # sao Bắc phái an khác sách (Thương Sứ, Khôi Việt, Thiên Quan...)
+    S = {p: [] for p in range(12)}
+    for ten, p in r["sao"].items():
+        S[p].append(ten)
+    R["S"] = S
+    for p in range(12):
+        c, ce = r["cung"][p], e["cung"][p]
+        c["chinh"] = [t for t, _ in ce["chinh"]]
+        c["phu"] = [t for t in S[p] if t not in R["chinh"] and t not in c["chinh"]]
+        c["phi_hoa"] = ce["phi_hoa"]
+        c["luu_bp"] = [f"{t}{' (' + s + ')' if s else ''}" for t, s in ce["luu"]]
+        if ce["trang_sinh"]:
+            c["trang_sinh"] = ce["trang_sinh"]
+    return r
+
+
+def sang(r, ten):
+    """'Đà La' -> 'Đà La(hãm)' nếu có độ sáng."""
+    s = r.get("sang", {}).get(ten)
+    return f"{ten}({s})" if s else ten
+
+
 def quet_han(r, nam0, so_nam, ly):
     """Quét từng năm: đại hạn, tiểu hạn, sát tinh gốc + lưu chạm vào hạn. Chỉ GẮN CỜ, không phán.
     Cờ theo TVCN1 L1837-1851: trùng phùng đại/tiểu hạn; Thương Sứ; Kình Đà + Thái Tuế; Không Kiếp."""
@@ -545,7 +583,7 @@ def khung_luan(r):
 
     def ten(p):
         c = r["cung"][p]
-        return f"{c['chuc']}({c['chi']}): {', '.join(c['chinh']) or 'VCĐ'}"
+        return f"{c['chuc']}({c['chi']}): {', '.join(sang(r, t) for t in c['chinh']) or 'VCĐ'}"
 
     m = r["menh"]
     tuoi_duong = R["duong"]
@@ -568,8 +606,8 @@ def khung_luan(r):
         cat = [s for s in S[p] if s in CAT]
         tt = ("Tuần " if c["tuan"] else "") + ("Triệt" if c["triet"] else "")
         L.append(f"[{c['chuc']} · {c['chi']} · {c['hanh']}, {hl} với bản mệnh{' · ' + tt.strip() if tt else ''}]")
-        L.append(f"   thủ: {', '.join(c['chinh']) or 'VÔ CHÍNH DIỆU → mượn xung chiếu ' + ten(ch['xung'])}"
-                 f" | cát: {', '.join(cat) or '-'} | sát: {', '.join(sat) or '-'}")
+        L.append(f"   thủ: {', '.join(sang(r, t) for t in c['chinh']) or 'VÔ CHÍNH DIỆU → mượn xung chiếu ' + ten(ch['xung'])}"
+                 f" | cát: {', '.join(sang(r, t) for t in cat) or '-'} | sát: {', '.join(sang(r, t) for t in sat) or '-'}")
         L.append(f"   tam hợp: {ten(ch['tam_hop'][0])} + {ten(ch['tam_hop'][1])} | xung: {ten(ch['xung'])}"
                  f" | nhị hợp: {ten(ch['nhi_hop'])} | giáp: {ten(ch['giap'][0])} & {ten(ch['giap'][1])}")
     L.append("")
@@ -630,8 +668,12 @@ def in_la_so(r, meta):
         tt = (" ·Tuần" if c["tuan"] else "") + (" ·Triệt" if c["triet"] else "")
         L.append(f"{c['chuc']:<10} {c['can_chi']:<10} {c['hanh']:<4} ĐH {c['dai_han']:<3} TH {c['tieu_han']:<4}"
                  f" {c['trang_sinh']}{tag}{tt}")
-        L.append(f"    Chính: {', '.join(c['chinh']) or '(vô chính diệu)'}")
-        L.append(f"    Phụ:   {', '.join(c['phu'])}")
+        L.append(f"    Chính: {', '.join(sang(r, t) for t in c['chinh']) or '(vô chính diệu)'}")
+        L.append(f"    Phụ:   {', '.join(sang(r, t) for t in c['phu'])}")
+        if c.get("phi_hoa"):
+            L.append(f"    Phi hóa: {' | '.join(c['phi_hoa'])}")
+        if c.get("luu_bp"):
+            L.append(f"    Lưu (Bắc phái): {', '.join(c['luu_bp'])}")
     return "\n".join(L)
 
 
@@ -653,6 +695,9 @@ def main():
                     help="tuổi Canh: Khoa Thái Âm, Kỵ Thiên Đồng (mặc định theo bảng sách: Khoa Đồng, Kỵ Âm)")
     ap.add_argument("--hoa-linh-cung-chieu", action="store_true",
                     help="Hỏa Linh cùng đi thuận (Bắc phái); mặc định theo sách: ngược chiều nhau")
+    ap.add_argument("--engine", choices=["auto", "bacphai", "sach"], default="auto",
+                    help="bacphai: vị trí + đắc hãm từ engine tuvibacphai (cần node); sach: chỉ Python theo "
+                         "Tử Vi Chỉ Nam; auto (mặc định): bacphai nếu chạy được, không thì sach")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--gon", action="store_true", help="chỉ in lá số, bỏ khung luận")
     ap.add_argument("--quet", type=int, metavar="N",
@@ -660,10 +705,23 @@ def main():
     a = ap.parse_args()
 
     notes = []
+    use_bp = False
+    if a.engine != "sach":
+        import engine as E
+        ok, why = E.san_sang()
+        if ok:
+            use_bp = True
+            # Bắc phái: Hỏa Linh cùng chiều, Canh Khoa Âm Kỵ Đồng, tháng nhuận tính tháng chính
+            a.hoa_linh_cung_chieu = a.canh_ky_dong = a.nhuan_thang_truoc = True
+        elif a.engine == "bacphai":
+            sys.exit(f"Không chạy được engine Bắc phái: {why}")
+        else:
+            notes.append(f"KHÔNG có đắc hãm: engine Bắc phái không chạy được ({why}); dùng Python theo sách")
     if a.am:
         h = parse_gio_am(a.gio)
         ld, lm, ly, leap = a.ngay, a.thang, a.nam, int(a.nhuan)
         sd = lunar_to_solar(ld, lm, ly, leap, a.tz)
+        hour = 2 * h  # giờ giữa canh giờ, để gọi engine
         meta = f"âm lịch nhập {ld}/{lm}{' nhuận' if leap else ''}/{ly}, dương lịch {sd[0]}/{sd[1]}/{sd[2]}"
     else:
         hour = int(a.gio)
@@ -673,6 +731,7 @@ def main():
             dd, mm, yy = jd_to_date(jd_from_date(dd, mm, yy) + 1)
             notes.append("sinh sau 23h: giờ Tý tính sang ngày hôm sau (TVCN1 L297)")
         ld, lm, ly, leap = solar_to_lunar(dd, mm, yy, a.tz)
+        sd = (dd, mm, yy)
         meta = f"dương lịch {a.ngay}/{a.thang}/{a.nam} {hour:02d}:{a.phut:02d}"
     if leap:
         if a.nhuan_thang_truoc or ld <= 15:
@@ -683,9 +742,17 @@ def main():
     meta += " · " + ("nữ" if a.nu else "nam")
 
     r = lap_la_so(ld, lm, ly, h, not a.nu, a.namxem, a.canh_ky_dong, a.hoa_linh_cung_chieu)
-    if a.canh_ky_dong:
+    if use_bp:
+        e = E.chay(sd[0], sd[1], sd[2], 0 if hour == 23 else hour, a.phut, a.nu, namxem=a.namxem)
+        ap_engine(r, e)
+        notes.append("engine Bắc phái (tuvibacphai): vị trí sao + đắc hãm (miếu/vượng/đắc/bình/hãm), phi hóa,"
+                     " sao lưu Bắc phái; khung luận + sao lưu L.* + quét hạn do Python tính và đã đối chiếu khung")
+        if r["lech_quy_uoc"]:
+            notes.append("sao Bắc phái an khác sách (quy ước trường phái, xem an-sao.md §7): " + "; ".join(
+                f"{t} sách {CHI[a_]} → BP {CHI[b_]}" for t, (a_, b_) in r["lech_quy_uoc"].items()))
+    elif a.canh_ky_dong:
         notes.append("Tứ Hóa tuổi Canh theo thuyết Khoa Âm / Kỵ Đồng")
-    if a.hoa_linh_cung_chieu:
+    if a.hoa_linh_cung_chieu and not use_bp:
         notes.append("Hỏa Linh an cùng chiều thuận (Bắc phái)")
     r["ghi_chu"] = notes
     if a.json:

@@ -97,17 +97,24 @@ Nguồn chính: TVCN1 L25-1366 ("Cách lấy số Tử Vi"). Ký hiệu cung: T�
 
    Vị trí sao không đổi. Bảng Thiên Hình theo Thân cùng trang khớp công thức cũ với giờ Sửu và giờ Mùi. Riêng câu "giờ Tý → Phụ Mẫu, giờ Ngọ → Tật" (L105) bị đảo: công thức cho giờ Tý → Tật, giờ Ngọ → Phụ Mẫu. Chính TT09 ở L122 và L425 cũng viết "sinh giờ Tý (tức là Ách có Thiên Hình)", "giờ Tỵ: Mệnh có Thiên Hình", khớp công thức. Vậy L105 là chỗ sách tự mâu thuẫn.
 
-## 7. Biến thể trường phái
+## 7. Biến thể trường phái: engine Bắc phái (mặc định của `laso.py`)
 
-Code an sao của tuvibacphai (Bắc phái, file lasotuvi.js; không đi kèm skill) khác sách ở các điểm sau:
+Engine chính là code an sao của tuvibacphai, nằm trong `<skill>/engine/` và chạy bằng node + jsdom. `laso.py` lập lá số Python song song rồi so khung với engine. `doichieu.py` so hai bên trên các lá số ngẫu nhiên: 200/200 khớp, ngoài các điểm dưới đây.
 
-- **Hỏa/Linh:** mặc định cả hai đi thuận. Dùng `--hoa-linh-cung-chieu` để chọn cách này.
-- **Thương/Sứ:** đổi chỗ cho người âm nam, dương nữ. Sách giữ cố định, và bài Thương Sứ của TT03 (L386-397) chỉ đúng khi cố định, nên không làm tuỳ chọn.
-- **Sao không có trong sách:** Lưu Hà (Giáp Dậu, Ất Tuất, Bính Mùi, Đinh Thân, Mậu Tỵ, Kỷ Ngọ, Canh Mão, Tân Thìn, Nhâm Hợi, Quý Dần), Thiên Trù, Địa Giải, Thiên Nguyệt, Âm Sát…
+| Điểm | Sách (TVCN) | Bắc phái | Ghi chú |
+|---|---|---|---|
+| Hỏa/Linh | ngược chiều nhau | cả hai đi thuận | Python có `--hoa-linh-cung-chieu` |
+| Thương/Sứ | cố định ở Nô (+5) và Tật (+7) | đổi chỗ cho âm nam, dương nữ | Bài Thương Sứ của TT03 (L386-397) chỉ đúng khi cố định |
+| Khôi/Việt | Giáp Mậu: Sửu/Mùi; Ất Kỷ: Tý/Thân; Bính Đinh: Hợi/Dậu; Canh Tân: Ngọ/Dần; Nhâm Quý: Mão/Tỵ | chia theo can âm dương. Giáp: Mùi/Sửu; Mậu Canh: Sửu/Mùi; Ất: Thân/Tý; Kỷ: Tý/Thân; Bính: Dậu/Hợi; Đinh: Hợi/Dậu; Tân: Dần/Ngọ; Nhâm: Mão/Tỵ; Quý: Tỵ/Mão | Khôi Việt kiểu Tàu, TT08 L247 có nhắc |
+| Tứ Hóa tuổi Canh | Khoa Đồng, Kỵ Âm | Khoa Âm, Kỵ Đồng | Python có `--canh-ky-dong` |
+| Thiên Quan | bảng TVCN | khác ở tuổi Tân (Thân) và Kỷ (Tuất) | |
+| Tháng nhuận | ngày 1–15 tính tháng chính, 16–30 tính tháng sau (TVCN1 L295) | luôn tính tháng chính | |
+| Độ sáng | rải rác theo từng sao; một số câu chép sai, ví dụ Đà La L2281 | đủ bảng `miếu > vượng > đắc > bình > nhàn > hãm` | Lệch thì suy luận theo `luan.md` §2 |
 
-Khôi Việt kiểu Tàu ("Giáp Mậu Canh ở Sửu Mùi") được TT08 L247 nhắc tới, nhưng sách không theo.
+Sao chỉ có ở engine: Lưu Hà, Thiên Trù, Địa Giải, Thiên Nguyệt, Âm Sát, vòng Tướng Tinh (Tướng Tinh, Phan An, Vong Thần, Tức Thần, Chỉ Bối, Hàm Trì…), Thiên Vu, Đài Phụ…
+Sao chỉ có ở Python: Thiên Y, Giải Thần, Nguyệt Đức, Thai Phụ, Văn Tinh, Thiên La, Địa Võng, Thiếu Dương, Phúc Đức. Engine đặt tên vòng Thái Tuế khác, ví dụ Hối Khí. Các sao này vẫn được giữ trong kết quả.
 
 ## 8. Chưa có trong `laso.py`
 
-- Miếu, vượng, đắc, hãm của chính tinh: sách không có bảng đầy đủ. Tra theo từng sao: `tra <tên sao> mieu ham`.
+- Miếu hãm theo **sách Việt** dưới dạng bảng: sách không có bảng đầy đủ. Độ sáng hiện lấy từ engine Bắc phái; muốn đối chiếu thì tra theo từng sao: `tra <tên sao> mieu ham`.
 - Lưu niên tinh (lưu Thái Tuế, lưu Lộc…), Mệnh chủ, Thân chủ.

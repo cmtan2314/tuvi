@@ -5,17 +5,21 @@ description: Lập và luận lá số Tử Vi Đẩu Số; tra sách Tử Vi (T
 
 # Tử Vi: lập lá số, tra sách, luận có lý
 
-`<skill>` là thư mục chứa file SKILL.md này (khi skill được nạp, Claude Code ghi nó ở dòng "Base directory for this skill"). Mọi đường dẫn dưới đây đều tính từ `<skill>`. Các script tự tìm dữ liệu theo vị trí của chính chúng, nên chép cả thư mục sang máy khác là chạy được. Chỉ cần python3 với thư viện chuẩn.
+`<skill>` là thư mục chứa file SKILL.md này (khi skill được nạp, Claude Code ghi nó ở dòng "Base directory for this skill"). Mọi đường dẫn dưới đây đều tính từ `<skill>`. Các script tự tìm dữ liệu theo vị trí của chính chúng, nên chép cả thư mục sang máy khác là chạy được.
+
+Cần có:
+- **python3** (bắt buộc);
+- **node** cùng `jsdom` cho engine Bắc phái. Engine cho **đắc hãm**, phi hóa và sao lưu đại vận. Cài trên máy mới: `cd <skill>/engine && npm install`. Node lấy theo thứ tự: biến `TUVI_NODE`, file `engine/node`, rồi `node` trong PATH. Không có node thì `laso.py` tự quay về engine Python theo sách, nhưng **không có đắc hãm**.
 
 ```bash
-python3 <skill>/scripts/laso.py --ngay 18 --thang 2 --nam 1992 --gio 17 --phut 30 [--nu] [--namxem 2026]   # lập lá số
+python3 <skill>/scripts/laso.py --ngay 18 --thang 2 --nam 1992 --gio 17 --phut 30 [--nu] --namxem 2026 --quet 25   # lập lá số + khung luận + quét hạn
 python3 <skill>/scripts/tra kinh duong mieu dia                                                         # tra sách
 python3 <skill>/scripts/kiemtra                                                                         # tự kiểm cả skill
 ```
 
 ## 4 luật không được phá
 
-1. **Không an sao bằng trí nhớ.** Mọi vị trí sao phải lấy từ `laso.py`. Bộ an sao đã được kiểm bằng 30 phép thử lấy từ lá số mẫu trong sách.
+1. **Không an sao và không chấm đắc hãm bằng trí nhớ.** Mọi vị trí và độ sáng của sao phải lấy từ `laso.py`. Hai engine kiểm chéo lẫn nhau: Python đạt 30 phép thử lấy từ lá số mẫu trong sách, và khớp engine Bắc phái trên 200/200 lá số ngẫu nhiên, ngoài các quy ước trường phái đã biết.
 2. **Không đọc cả file sách** (sách dài tới 9.800 dòng). Dùng `tra` (khoảng 30ms), rồi `Read` đúng dòng mà nó in ra.
 3. **Suy luận trước, trích sách sau.** Kết luận phải đi từ cấu trúc lá số (xem mục Luận). Sách chỉ là bằng chứng.
 4. **Sách sai hoặc tự mâu thuẫn thì theo lý, và nói rõ:** chọn gì, vì sao, dẫn cả hai nguồn.
@@ -27,8 +31,10 @@ Trả lời bằng tiếng Việt, viết thẳng trong chat. Dẫn nguồn theo
 **A. Người dùng đưa ngày giờ sinh: luận ĐẦY ĐỦ, không tóm tắt**
 1. Cần đủ ngày, tháng, năm, giờ, giới tính, và biết là dương hay âm lịch. Thiếu giới tính thì hỏi. Giờ sinh sát ranh canh giờ (ví dụ 12h55) thì lập cả hai lá số, hoặc hỏi lại.
 2. Chạy `laso.py ... --namxem <năm nay> --quet 20`. Lệnh in ra lá số, **KHUNG LUẬN** (tam phương tứ chính từng cung, âm dương, vòng Thái Tuế, Tứ Hóa, đại hạn, sao lưu, nguyệt hạn) và **QUÉT HẠN** (cờ hung, cát từng năm).
-3. **Đọc `<skill>/references/luan.md` rồi viết đúng khuôn trong đó.** Bài gồm 8 phần: tổng quan và cách cục, tính cách, từng lĩnh vực (nghề, tiền, hôn nhân, con, sức khỏe…), mọi đại hạn, năm xem theo từng tháng, bảng hạn hung, lời khuyên, ghi chú phương pháp. Thường 3.000–6.000 từ, giải nghĩa thuật ngữ cho người không biết Tử Vi.
-4. Trước khi viết phải tra (chạy song song): chính tinh theo từng cung, các cách cục nghi có, các sát tinh lớn. Một bài chỉ dán nhãn sao ("có Lộc nên có tiền") mà thiếu cơ chế, thời điểm và lời khuyên là **chưa đạt**.
+3. **Đọc `<skill>/references/luan.md` rồi viết đúng khuôn trong đó.** Bài gồm 8 phần: tổng quan và cách cục, tính cách, từng lĩnh vực (nghề, tiền, hôn nhân, con, sức khỏe…), mọi đại hạn, năm xem theo 12 tháng, bảng hạn hung, lời khuyên, ghi chú phương pháp. Thường **6.000–10.000 từ**. Mọi sao đều có độ sáng. Mọi lời sách cổ được **dịch sang hoàn cảnh hiện đại** (luan.md §4). Giải nghĩa thuật ngữ cho người không biết Tử Vi.
+4. Trước khi viết phải tra (chạy song song): chính tinh theo 12 cung, đắc hãm theo sách để đối chiếu với engine, các cách cục nghi có, các sát tinh lớn, mục nghề nghiệp. Bài đạt yêu cầu không được có các lỗi sau:
+   - chỉ dán nhãn sao ("có Lộc nên có tiền") mà thiếu cơ chế, thời điểm và lời khuyên;
+   - có mục "hạn chế: chưa tra…".
 
 **B. Hỏi về sao, cung hoặc cách cục**
 1. Chạy `tra <vài từ đặc trưng>`. Có thể chạy song song nhiều lệnh `tra` cho các khía cạnh khác nhau.
@@ -46,6 +52,7 @@ Trả lời bằng tiếng Việt, viết thẳng trong chat. Dẫn nguồn theo
 | `--nu` | Nữ (mặc định là nam) |
 | `--namxem 2026` | Tuổi âm, đại hạn, tiểu hạn và cung tháng Giêng của năm xem |
 | `--quet 20` | Quét 20 năm kể từ năm xem: mỗi năm một dòng gồm đại hạn, tiểu hạn, cờ hung (sát tinh tại hoặc chiếu, sao lưu đè lên hạn, Thương Sứ, trùng phùng) và cát giải |
+| `--engine auto/bacphai/sach` | `auto` (mặc định): dùng engine Bắc phái nếu chạy được, không thì Python theo sách. `sach`: luôn dùng Python theo Tử Vi Chỉ Nam, không có đắc hãm |
 | `--gon` | Chỉ in lá số, bỏ khung luận |
 | `--json` | Xuất dữ liệu thô |
 | `--ty-cung-ngay` | Sinh lúc 23h vẫn tính là ngày đó. Mặc định tính sang ngày hôm sau (TVCN1 L297) |
@@ -53,13 +60,27 @@ Trả lời bằng tiếng Việt, viết thẳng trong chat. Dẫn nguồn theo
 | `--canh-ky-dong` | Tuổi Canh: Khoa Âm, Kỵ Đồng. Mặc định là Khoa Đồng, Kỵ Âm |
 | `--hoa-linh-cung-chieu` | Hỏa và Linh cùng đi thuận (Bắc phái). Mặc định theo sách: hai sao đi ngược chiều nhau |
 
-Năm dòng cuối là các quy ước khác nhau giữa trường phái. Khi một quy ước làm đổi kết quả, phải nói rõ đang theo quy ước nào.
+Bốn dòng cuối của bảng là các quy ước khác nhau giữa trường phái, và chỉ có tác dụng khi chạy `--engine sach`.
+
+**Engine Bắc phái (mặc định).** Engine chạy code của tuvibacphai trong `engine/`. Python lập lá số song song, so khung (Mệnh, Tử Vi), rồi lấy vị trí và độ sáng từ engine. Quy ước của Bắc phái:
+- Hỏa Linh cùng chiều.
+- Tuổi Canh: Khoa Âm, Kỵ Đồng.
+- Tháng nhuận tính là tháng chính.
+- Thương/Sứ đổi chỗ cho âm nam và dương nữ.
+- Khôi/Việt chia theo can âm hay dương.
+- Thiên Quan khác bảng ở tuổi Tân và Kỷ.
+
+Các sao lệch sách được in ở dòng `Ghi chú: sao Bắc phái an khác sách`. Muốn so với cách an theo sách thì chạy thêm `--engine sach`.
+
+**Độ sáng** xếp theo thứ tự `miếu > vượng > đắc > bình > nhàn > hãm`. Đây là bảng của Bắc phái, nên đôi chỗ lệch sách Việt; ví dụ Thiên Đồng ở Dần engine chấm `nhàn`, còn TVCN1 L2141 khen Đồng Lương ở Dần là "tốt nhất". Khi lệch thì **suy luận theo `luan.md` §2** (ngũ hành sao so với cung, bộ sao, độ rõ của câu sách) rồi nói rõ đã chọn gì.
 
 Kết quả gồm: âm dương, chiều đi, bản mệnh, cục và quan hệ sinh khắc, Mệnh, Thân cư, Tuần, Triệt. Mỗi cung có can chi, hành, đại hạn, tiểu hạn, sao vòng Tràng Sinh, chính tinh và phụ tinh (khoảng 90 sao).
 
-`laso.py` chưa có miếu/hãm của chính tinh, vì sách không có bảng đầy đủ. Muốn biết thì tra từng sao, ví dụ `tra thai duong mieu ham`.
+Chạy `--engine sach`, hoặc máy không có node, thì kết quả **không có đắc hãm**. Khi đó phải tra từng sao, ví dụ `tra thai duong mieu ham`, và nói rõ điều này trong bài.
 
-Sao lưu (L.Thái Tuế, L.Lộc Tồn, L.Kình, L.Đà, L.Tứ Hóa, L.Mã, L.Tang Hổ, L.Khốc Hư) được an theo đúng quy tắc của sao năm sinh, chỉ thay can chi năm sinh bằng can chi năm xem. Sách không có bảng riêng cho sao lưu, nên khi dùng phải nói rõ điều này.
+Có hai bộ sao lưu:
+- `L.*` trong khung luận do Python an theo đúng quy tắc của sao năm sinh, chỉ thay can chi năm sinh bằng can chi năm xem. Sách không có bảng riêng cho sao lưu, nên khi dùng phải nói rõ điều này.
+- Dòng `Lưu (Bắc phái)` là sao lưu của engine: `Đv.` cho đại vận, `L.` cho lưu niên, `N.` cho lưu nguyệt.
 
 ## tra: tra sách
 
@@ -108,11 +129,12 @@ Lá số là một hệ có cơ chế: ngũ hành, âm dương, tam hợp, xung 
    Các trường hợp đã gặp:
    - `references/an-sao.md` §6 ghi 7 trường hợp, ví dụ lá số in sai ở TVCN1 trang 126, câu Thiên Hình bị đảo ở TT09 L105.
    - Bảng viết tắt hành sao trong TVCN1 bị OCR trộn cột, nên tin phần giải thích riêng của từng sao: Thiên Phủ thuộc Thổ (L1999), Văn Khúc thuộc Thủy (L1826), Tuế Phá thuộc Hỏa (L2542).
-   - Đắc hãm của Đà La: TVCN1 L2281 chép bảng của Kình, trong đó có cả Tý Ngọ Mão Dậu, nơi Đà không bao giờ đứng được. TT03 L344-354 lại coi Đà ở Dần Thân Tỵ Hợi hợp Mệnh Kim là đắc cách. Hai bên phải cân, xem `luan.md` §5.
+   - Đắc hãm của Đà La: TVCN1 L2281 chép bảng của Kình, trong đó có cả Tý Ngọ Mão Dậu, nơi Đà không bao giờ đứng được. Engine Bắc phái chấm hãm. TT03 L344-354 lại coi Đà ở Dần Thân Tỵ Hợi hợp Mệnh Kim là đắc cách. Phải cân cả ba nguồn, xem `luan.md` §7.
    - Một câu sách nêu vị trí mà sao **không thể đứng được** theo cách an sao là dấu hiệu chép sai. Đối chiếu bằng `laso.py`.
    - Chỗ in sai đã sửa được đánh dấu ngay trong thẻ. Chỗ chưa chắc ghi `(?)`.
 5. **Hai bộ sách, hai lối.** TVCN theo phú cổ. TVNL lý giải bằng âm dương và Thái Tuế, hay nêu ngoại lệ. Khi hai bộ lệch nhau, nêu cả hai rồi để cấu trúc lá số quyết định.
 6. **Phụ Mẫu và Huynh Đệ:** TVCN1 tự nhận phần này "sai 7–8 phần" (TVCN1 L5830 trở đi). Không phán chắc ở hai cung này.
+7. **Áp dụng vào đời sống hiện đại.** Sách viết cho xã hội cũ, phải dịch theo *bản chất của sao* chứ không dịch từng chữ. Ví dụ: "làm quan" là có vị trí quản lý hoặc vào công chức; "đầy tớ" là cấp dưới, đồng nghiệp; "ruộng" là bất động sản; "chết đường" là tai nạn giao thông. Bảng đối chiếu và bảng nghề theo chính tinh nằm ở `luan.md` §4. Khi diễn giải phải nói rõ đó là suy luận.
 
 ## Khi có lỗi
 
@@ -121,13 +143,22 @@ Lá số là một hệ có cơ chế: ngũ hành, âm dương, tam hợp, xung 
 | Không chắc skill còn chạy đúng | Chạy `python3 <skill>/scripts/kiemtra`. Nó in `SKILL OK`, hoặc chỉ ra đúng phần hỏng |
 | Index thiếu, hỏng, hoặc cũ hơn sách/thẻ | Không cần làm gì: `tra` tự dựng lại (khoảng 0,4 giây, có báo ra stderr) |
 | `tra` báo "Không thấy" | Bớt từ, đổi cách viết, bỏ `-b` |
+| `Ghi chú: KHÔNG có đắc hãm` | Engine Bắc phái không chạy được: thiếu node hoặc jsdom. Cài node rồi chạy `npm install` trong `<skill>/engine`, hoặc đặt `TUVI_NODE`. Chạy `kiemtra` để xem lý do |
+| `engine lệch khung` | Hai engine cho Mệnh hoặc Tử Vi khác nhau. Không dùng kết quả. Chạy `doichieu.py` và kiểm lại cách đổi lịch |
 | Kết quả `laso.py` nghi sai so với sách | Chạy `test_laso.py`. Đối chiếu sao đó trong `an-sao.md`. Kiểm lại xem có đang dùng quy ước trường phái khác không. Nếu sách sai, xử lý theo Luận mục 4 |
 
 ## Bảo trì
 
-Skill tự chứa đủ: `scripts/`, `references/books/` (sách dạng .md), `references/the/` (thẻ), `references/an-sao.md`. File `references/tuvi.db` có thể xóa, vì nó được dựng lại tự động. Chép cả thư mục là mang được sang máy khác.
+Skill gồm:
+- `scripts/`;
+- `engine/`: code Bắc phái và `package.json`. Không đưa `node_modules` và link `node` vào git;
+- `references/books/`: sách dạng .md;
+- `references/the/`: thẻ;
+- `references/an-sao.md`, `references/luan.md`.
+
+File `references/tuvi.db` có thể xóa, vì nó được dựng lại tự động. Chép cả thư mục sang máy khác rồi chạy `npm install` trong `engine/` là dùng được.
 
 - **Sửa sách hoặc thẻ:** không phải làm gì thêm, lần tra sau sẽ tự dựng lại index.
-- **Sửa `laso.py`:** chạy `kiemtra`, phải ra `SKILL OK`. Phép thử mới thì thêm vào `test_laso.py`, lấy từ lá số mẫu trong sách.
+- **Sửa `laso.py` hoặc `engine/`:** chạy `kiemtra`, phải ra `SKILL OK`. Lệnh này gồm cả `doichieu.py`, so hai engine trên nhiều lá số ngẫu nhiên. Phép thử mới thì thêm vào `test_laso.py`, lấy từ lá số mẫu trong sách.
 - **Sửa chính tả sách:** giữ nguyên số dòng, vì các thẻ trỏ vào sách bằng `[Lnnn]`. Không tự động "sửa dấu" hàng loạt: bản sửa tự động từng đổi tên sao, ví dụ Tham thành Thân.
 - **Làm lại một thẻ:** giữ đúng khuôn. Mỗi mục là `## Tiêu đề · L… · trang …`, mỗi ý có `[Lnnn]`, cuối thẻ có `## Từ khoá`.

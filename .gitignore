@@ -1,2 +1,4 @@
 references/tuvi.db
 __pycache__/
+engine/node_modules/
+engine/node

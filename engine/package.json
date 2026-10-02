@@ -1,0 +1,5 @@
+{
+  "name": "tuvi-engine",
+  "private": true,
+  "dependencies": { "jsdom": "^25.0.1" }
+}
