@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+"""Tự kiểm cả skill trong vài giây: index, tra, lập lá số, 30 phép thử an sao.
+In 'SKILL OK' nếu mọi thứ chạy; nếu không, in đúng chỗ hỏng và cách sửa.
+
+  python3 scripts/kiemtra        (chạy từ thư mục skill, hoặc dùng đường dẫn đầy đủ tới file này)
+"""
+import subprocess
+import sys
+from pathlib import Path
+
+S = Path(__file__).resolve().parent
+PY = sys.executable
+bad = []
+
+
+def run(name, cmd, must):
+    try:
+        out = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        txt = out.stdout + out.stderr
+        ok = out.returncode == 0 and must in txt
+    except Exception as e:  # noqa: BLE001
+        ok, txt = False, str(e)
+    print(("OK   " if ok else "HỎNG ") + name)
+    if not ok:
+        bad.append(name)
+        print("     " + txt.strip()[-600:].replace("\n", "\n     "))
+
+
+sys.path.insert(0, str(S))
+from build import DB, MD, THE  # noqa: E402
+
+books, cards = len(list(MD.glob("*.md"))), len(list(THE.glob("*.md")))
+print(f"sách: {books} file, thẻ: {cards} file, index: {DB.stat().st_size // 1024 if DB.exists() else 0} KB")
+if books < 12 or cards < 10:
+    bad.append("thiếu sách/thẻ")
+    print("HỎNG thiếu file trong references/books (cần 12) hoặc references/the (cần 10)")
+
+run("tra (tự dựng index nếu cần)", [PY, str(S / "tra"), "kinh duong"], "GỐC")
+run("laso.py lập lá số", [PY, str(S / "laso.py"), "--ngay", "18", "--thang", "2", "--nam", "1992",
+                          "--gio", "17"], "Mệnh tại Tỵ")
+run("test_laso.py (an sao khớp sách)", [PY, str(S / "test_laso.py")], "TẤT CẢ ĐÚNG")
+
+print("SKILL OK" if not bad else f"SKILL HỎNG: {', '.join(bad)}")
+sys.exit(1 if bad else 0)

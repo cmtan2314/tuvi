@@ -1,0 +1,137 @@
+#!/usr/bin/env python3
+"""Tra cứu sách Tử Vi bằng một lệnh. Gõ không dấu cũng được, chịu được lỗi dấu do OCR.
+
+Kết quả có 2 phần:
+  THẺ  - quy tắc đã tóm tắt sẵn (references/the/*.md), in nguyên văn -> thường đủ để trả lời
+  GỐC  - đoạn trích sách gốc (references/books/*.md) kèm đường dẫn:dòng -> để kiểm chứng
+
+  tra kinh da thin tuat           # mặc định: 2 thẻ + 5 trích đoạn gốc
+  tra -b TT03 tai tho             # chỉ trong một sách (TT01..TT09, TVCN1, TVCN2, LICH*)
+  tra --goc -k 10 thuong su       # chỉ sách gốc, 10 kết quả
+  tra --goc -f bach ho duong phu  # in nguyên văn cả đoạn gốc
+  tra '"hoa ky" OR "hoa ki"'      # cú pháp FTS5 thô khi cần
+"""
+import argparse
+import re
+import sqlite3
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from build import DB, MD, THE, fold  # noqa: E402
+
+WINDOW = 220
+CARD_MAX = 3000  # ký tự; thẻ dài hơn thì chỉ in các ý khớp
+CARD_ITEMS = 5   # số ý tối đa in từ một thẻ dài
+
+
+def snippet(text: str, terms: list[str]) -> str:
+    f = fold(text)
+    phrase = " ".join(terms)
+    pos = f.find(phrase)
+    if pos < 0:
+        hits = [f.find(t) for t in terms if f.find(t) >= 0]
+        pos = min(hits) if hits else 0
+    a, b = max(0, pos - WINDOW // 2), min(len(text), pos + len(phrase) + WINDOW)
+    s = re.sub(r"\s+", " ", text[a:b]).strip()
+    return ("…" if a else "") + s + ("…" if b < len(text) else "")
+
+
+def ensure_index():
+    """Tự dựng lại index nếu thiếu, hỏng, hoặc cũ hơn sách/thẻ -> không bao giờ tra trên dữ liệu cũ."""
+    srcs = list(MD.glob("*.md")) + list(THE.glob("*.md")) + [Path(__file__).with_name("build.py")]
+    try:
+        stale = not DB.exists() or DB.stat().st_mtime < max(p.stat().st_mtime for p in srcs)
+        if not stale:
+            sqlite3.connect(DB).execute("SELECT 1 FROM c LIMIT 1")
+    except (ValueError, sqlite3.Error):
+        stale = True
+    if stale:
+        import contextlib
+        import io
+        import build
+        with contextlib.redirect_stdout(io.StringIO()):
+            build.main()
+        print("(đã tự dựng lại index)", file=sys.stderr)
+
+
+def trim_card(text: str, terms: list[str], where: str) -> str:
+    """Thẻ dài: chỉ giữ tiêu đề + các ý chứa từ tra, để không tốn token."""
+    if len(text) <= CARD_MAX:
+        return text
+    lines = text.splitlines()
+    items = [l for l in lines[1:] if l.strip()]
+    # xếp ý theo số từ tra khớp (từ hiếm như "kinh" quan trọng hơn từ phổ biến như "dia")
+    score = [sum(t in fold(l) for t in set(terms)) for l in items]
+    best = max(score, default=0)
+    keep = {i for i, s in sorted(enumerate(score), key=lambda x: -x[1])[:CARD_ITEMS] if s and s >= best - 1}
+    hit = [l for i, l in enumerate(items) if i in keep] or items[:3]
+    return "\n".join([lines[0], *hit,
+                      f"(thẻ dài: in {len(hit)}/{len(items)} ý khớp; đủ cả thẻ: -f hoặc Read {where})"])
+
+
+def search(con, terms, raw_q, where, wargs, k):
+    if raw_q:
+        queries = [raw_q]
+    else:
+        quoted = [f'"{t}"' for t in terms]
+        # cụm liền > tất cả từ > bất kỳ từ nào
+        queries = [f'"{" ".join(terms)}"', " AND ".join(quoted), " OR ".join(quoted)]
+    seen, out = set(), []
+    for fq in queries:
+        rows = con.execute(
+            "SELECT rowid, book, file, page, heading, l1, l2, text FROM c "
+            f"WHERE c MATCH ? AND {where} ORDER BY bm25(c) LIMIT ?",
+            [fq, *wargs, k],
+        ).fetchall()
+        for r in rows:
+            if r[0] not in seen:
+                seen.add(r[0])
+                out.append(r)
+        if len(out) >= k:
+            break
+    return out[:k]
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("query", nargs="+")
+    ap.add_argument("-k", type=int, default=5, help="số trích đoạn gốc (mặc định 5)")
+    ap.add_argument("-t", type=int, default=2, help="số thẻ (mặc định 2)")
+    ap.add_argument("-b", "--book", help="giới hạn một sách: TT01..TT09, TVCN1, TVCN2, LICH, LICH2, LICH3")
+    ap.add_argument("-f", "--full", action="store_true", help="in nguyên văn cả đoạn gốc và cả thẻ dài")
+    ap.add_argument("--goc", action="store_true", help="chỉ tra sách gốc")
+    ap.add_argument("--the", action="store_true", help="chỉ tra thẻ")
+    ap.add_argument("--raw", action="store_true", help="truyền thẳng cú pháp FTS5")
+    a = ap.parse_args()
+
+    ensure_index()
+    con = sqlite3.connect(DB)
+    q = " ".join(a.query)
+    raw_q = fold(q) if (a.raw or re.search(r'"| OR | NOT | NEAR', q)) else None
+    terms = re.findall(r"\w+", fold(q))
+    book = a.book.upper() if a.book else None
+
+    cards, src = [], []
+    if not a.goc:
+        w, wa = ("book = ?", ["THE-" + book]) if book else ("book LIKE 'THE-%'", [])
+        cards = search(con, terms, raw_q, w, wa, a.t)
+    if not a.the:
+        w, wa = ("book = ?", [book]) if book else ("book NOT LIKE 'THE-%' AND book NOT LIKE 'LICH%'", [])
+        src = search(con, terms, raw_q, w, wa, a.k)
+
+    if not cards and not src:
+        print("Không thấy. Thử ít từ hơn, hoặc từ đồng nghĩa.")
+        return
+    for _, book_, file, _, heading, l1, l2, text in cards:
+        print(f"=== THẺ {book_[4:]} · {THE / file}:{l1}-{l2}")
+        print(text if a.full else trim_card(text, terms, f"{THE / file}:{l1}-{l2}"))
+        print()
+    for i, (_, book_, file, page, heading, l1, l2, text) in enumerate(src, 1):
+        print(f"[{i}] GỐC {book_} {page} · {MD / file}:{l1}-{l2} · {heading[:70]}")
+        print(text if a.full else "    " + snippet(text, terms))
+        print()
+
+
+if __name__ == "__main__":
+    main()
