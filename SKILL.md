@@ -24,10 +24,11 @@ Trả lời bằng tiếng Việt, viết thẳng trong chat. Dẫn nguồn theo
 
 ## Quy trình
 
-**A. Người dùng đưa ngày giờ sinh**
+**A. Người dùng đưa ngày giờ sinh: luận ĐẦY ĐỦ, không tóm tắt**
 1. Cần đủ ngày, tháng, năm, giờ, giới tính, và biết là dương hay âm lịch. Thiếu giới tính thì hỏi. Giờ sinh sát ranh canh giờ (ví dụ 12h55) thì lập cả hai lá số, hoặc hỏi lại.
-2. Chạy `laso.py`. Nếu người dùng hỏi một năm cụ thể, thêm `--namxem`.
-3. Luận theo mục **Luận**. Sao hay cách nào quan trọng thì `tra` để lấy lời sách.
+2. Chạy `laso.py ... --namxem <năm nay> --quet 20`. Lệnh in ra lá số, **KHUNG LUẬN** (tam phương tứ chính từng cung, âm dương, vòng Thái Tuế, Tứ Hóa, đại hạn, sao lưu, nguyệt hạn) và **QUÉT HẠN** (cờ hung, cát từng năm).
+3. **Đọc `<skill>/references/luan.md` rồi viết đúng khuôn trong đó.** Bài gồm 8 phần: tổng quan và cách cục, tính cách, từng lĩnh vực (nghề, tiền, hôn nhân, con, sức khỏe…), mọi đại hạn, năm xem theo từng tháng, bảng hạn hung, lời khuyên, ghi chú phương pháp. Thường 3.000–6.000 từ, giải nghĩa thuật ngữ cho người không biết Tử Vi.
+4. Trước khi viết phải tra (chạy song song): chính tinh theo từng cung, các cách cục nghi có, các sát tinh lớn. Một bài chỉ dán nhãn sao ("có Lộc nên có tiền") mà thiếu cơ chế, thời điểm và lời khuyên là **chưa đạt**.
 
 **B. Hỏi về sao, cung hoặc cách cục**
 1. Chạy `tra <vài từ đặc trưng>`. Có thể chạy song song nhiều lệnh `tra` cho các khía cạnh khác nhau.
@@ -44,6 +45,8 @@ Trả lời bằng tiếng Việt, viết thẳng trong chat. Dẫn nguồn theo
 | `--am --gio sửu` | Ngày nhập là âm lịch; giờ ghi tên chi hoặc số 1–12. Tháng nhuận thì thêm `--nhuan` |
 | `--nu` | Nữ (mặc định là nam) |
 | `--namxem 2026` | Tuổi âm, đại hạn, tiểu hạn và cung tháng Giêng của năm xem |
+| `--quet 20` | Quét 20 năm kể từ năm xem: mỗi năm một dòng gồm đại hạn, tiểu hạn, cờ hung (sát tinh tại hoặc chiếu, sao lưu đè lên hạn, Thương Sứ, trùng phùng) và cát giải |
+| `--gon` | Chỉ in lá số, bỏ khung luận |
 | `--json` | Xuất dữ liệu thô |
 | `--ty-cung-ngay` | Sinh lúc 23h vẫn tính là ngày đó. Mặc định tính sang ngày hôm sau (TVCN1 L297) |
 | `--nhuan-thang-truoc` | Tháng nhuận luôn tính là tháng chính. Mặc định: ngày 1–15 tính tháng chính, 16–30 tính tháng sau |
@@ -55,6 +58,8 @@ Năm dòng cuối là các quy ước khác nhau giữa trường phái. Khi m�
 Kết quả gồm: âm dương, chiều đi, bản mệnh, cục và quan hệ sinh khắc, Mệnh, Thân cư, Tuần, Triệt. Mỗi cung có can chi, hành, đại hạn, tiểu hạn, sao vòng Tràng Sinh, chính tinh và phụ tinh (khoảng 90 sao).
 
 `laso.py` chưa có miếu/hãm của chính tinh, vì sách không có bảng đầy đủ. Muốn biết thì tra từng sao, ví dụ `tra thai duong mieu ham`.
+
+Sao lưu (L.Thái Tuế, L.Lộc Tồn, L.Kình, L.Đà, L.Tứ Hóa, L.Mã, L.Tang Hổ, L.Khốc Hư) được an theo đúng quy tắc của sao năm sinh, chỉ thay can chi năm sinh bằng can chi năm xem. Sách không có bảng riêng cho sao lưu, nên khi dùng phải nói rõ điều này.
 
 ## tra: tra sách
 
@@ -103,6 +108,8 @@ Lá số là một hệ có cơ chế: ngũ hành, âm dương, tam hợp, xung 
    Các trường hợp đã gặp:
    - `references/an-sao.md` §6 ghi 7 trường hợp, ví dụ lá số in sai ở TVCN1 trang 126, câu Thiên Hình bị đảo ở TT09 L105.
    - Bảng viết tắt hành sao trong TVCN1 bị OCR trộn cột, nên tin phần giải thích riêng của từng sao: Thiên Phủ thuộc Thổ (L1999), Văn Khúc thuộc Thủy (L1826), Tuế Phá thuộc Hỏa (L2542).
+   - Đắc hãm của Đà La: TVCN1 L2281 chép bảng của Kình, trong đó có cả Tý Ngọ Mão Dậu, nơi Đà không bao giờ đứng được. TT03 L344-354 lại coi Đà ở Dần Thân Tỵ Hợi hợp Mệnh Kim là đắc cách. Hai bên phải cân, xem `luan.md` §5.
+   - Một câu sách nêu vị trí mà sao **không thể đứng được** theo cách an sao là dấu hiệu chép sai. Đối chiếu bằng `laso.py`.
    - Chỗ in sai đã sửa được đánh dấu ngay trong thẻ. Chỗ chưa chắc ghi `(?)`.
 5. **Hai bộ sách, hai lối.** TVCN theo phú cổ. TVNL lý giải bằng âm dương và Thái Tuế, hay nêu ngoại lệ. Khi hai bộ lệch nhau, nêu cả hai rồi để cấu trúc lá số quyết định.
 6. **Phụ Mẫu và Huynh Đệ:** TVCN1 tự nhận phần này "sai 7–8 phần" (TVCN1 L5830 trở đi). Không phán chắc ở hai cung này.

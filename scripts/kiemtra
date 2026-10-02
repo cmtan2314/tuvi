@@ -38,6 +38,8 @@ if books < 12 or cards < 10:
 run("tra (tự dựng index nếu cần)", [PY, str(S / "tra"), "kinh duong"], "GỐC")
 run("laso.py lập lá số", [PY, str(S / "laso.py"), "--ngay", "18", "--thang", "2", "--nam", "1992",
                           "--gio", "17"], "Mệnh tại Tỵ")
+run("laso.py khung luận + quét hạn", [PY, str(S / "laso.py"), "--ngay", "14", "--thang", "5", "--nam", "2001",
+                                   "--gio", "18", "--namxem", "2026", "--quet", "3"], "L.Kình Dương ở đại hạn")
 run("test_laso.py (an sao khớp sách)", [PY, str(S / "test_laso.py")], "TẤT CẢ ĐÚNG")
 
 print("SKILL OK" if not bad else f"SKILL HỎNG: {', '.join(bad)}")

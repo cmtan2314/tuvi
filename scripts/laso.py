@@ -434,6 +434,10 @@ def lap_la_so(ld, lm, ly, h, nam_gioi, namxem=None, canh_ky_dong=False, hoa_linh
             "tuan": p in tuan, "triet": p in triet,
         })
 
+    out["_raw"] = {"yc": yc, "yz": yz, "nam_gioi": nam_gioi, "duong": duong, "d": d,
+                   "can_cung": can_cung, "chinh": chinh, "trang_sinh": trang_sinh,
+                   "cung_chuc": cung_chuc, "dai_han": dai_han, "tieu_han": tieu_han, "S": S,
+                   "tu_hoa": TU_HOA}
     if namxem:
         tuoi = namxem - ly + 1
         xz = (namxem + 8) % 12
@@ -442,11 +446,163 @@ def lap_la_so(ld, lm, ly, h, nam_gioi, namxem=None, canh_ky_dong=False, hoa_linh
         # Nguyệt hạn tháng Giêng (L1325): từ cung tiểu hạn gọi tháng Giêng, nghịch đến tháng sinh,
         # rồi gọi đó là giờ Tý, thuận đến giờ sinh
         nh1 = m12(thc - (lm - 1) + h)
+        xc = (namxem + 6) % 10
         out["nam_xem"] = {
-            "nam": namxem, "can_chi": can_chi((namxem + 6) % 10, xz), "tuoi_am": tuoi,
+            "nam": namxem, "can_chi": can_chi(xc, xz), "tuoi_am": tuoi,
             "dai_han": dh, "tieu_han": thc, "thang_gieng": nh1,
+            "luu": luu_nien(xc, xz, pos, TU_HOA),
         }
     return out
+
+
+def luu_nien(xc, xz, pos, tu_hoa):
+    """Sao lưu của năm xem. Sách không có bảng riêng: an theo ĐÚNG quy tắc sao năm sinh,
+    thay can chi năm sinh bằng can chi năm xem (Thái Tuế theo chi, Lộc Kình Đà và Tứ Hóa theo can,
+    Mã theo tam hợp chi, Tang Hổ theo vòng Thái Tuế, Khốc Hư theo chi)."""
+    loc = [2, 3, 5, 6, 5, 6, 8, 9, 11, 0][xc]
+    L = {
+        "L.Thái Tuế": xz, "L.Tang Môn": xz + 2, "L.Bạch Hổ": xz + 8, "L.Tuế Phá": xz + 6,
+        "L.Lộc Tồn": loc, "L.Kình Dương": loc + 1, "L.Đà La": loc - 1,
+        "L.Thiên Mã": {0: 2, 1: 11, 2: 8, 3: 5}[xz % 4],
+        "L.Thiên Khốc": 6 - xz, "L.Thiên Hư": 6 + xz,
+    }
+    for hoa, sao in zip(("L.Hóa Lộc", "L.Hóa Quyền", "L.Hóa Khoa", "L.Hóa Kỵ"), tu_hoa[xc]):
+        L[hoa] = pos[sao]
+    return {k: m12(v) for k, v in L.items()}
+
+
+def quet_han(r, nam0, so_nam, ly):
+    """Quét từng năm: đại hạn, tiểu hạn, sát tinh gốc + lưu chạm vào hạn. Chỉ GẮN CỜ, không phán.
+    Cờ theo TVCN1 L1837-1851: trùng phùng đại/tiểu hạn; Thương Sứ; Kình Đà + Thái Tuế; Không Kiếp."""
+    R = r["_raw"]
+    cc, S, sao = R["cung_chuc"], R["S"], r["sao"]
+    out = []
+    for y in range(nam0, nam0 + so_nam):
+        tuoi = y - ly + 1
+        if tuoi < r["cuc_so"]:
+            continue
+        xc, xz = (y + 6) % 10, (y + 8) % 12
+        dh = next(p for p in range(12) if R["dai_han"][p] <= tuoi < R["dai_han"][p] + 10)
+        th = next(p for p in range(12) if R["tieu_han"][p] == xz)
+        luu = luu_nien(xc, xz, sao, R["tu_hoa"])
+        flags = []
+        if dh == th:
+            flags.append("đại tiểu hạn TRÙNG PHÙNG")
+        vung = {th, *chieu(th)["tam_hop"], chieu(th)["xung"]}  # tiểu hạn + tam phương tứ chính
+
+        for s in ("Kình Dương", "Đà La", "Địa Không", "Địa Kiếp", "Hỏa Tinh", "Linh Tinh", "Hóa Kỵ", "Thiên Hình"):
+            if sao[s] in vung:
+                flags.append(f"{s} {'tại' if sao[s] == th else 'chiếu'}")
+        for k in ("L.Kình Dương", "L.Đà La", "L.Hóa Kỵ", "L.Tang Môn", "L.Bạch Hổ", "L.Thái Tuế"):
+            # Tang Môn lưu = chi năm + 2 trùng tiểu hạn một cách hệ thống ở một số tuổi -> chỉ cờ khi đè đại hạn
+            if luu[k] == dh:
+                flags.append(f"{k} ở đại hạn")
+            elif luu[k] == th and k != "L.Tang Môn":
+                flags.append(f"{k} ở tiểu hạn")
+        for s in ("Thiên Thương", "Thiên Sứ"):
+            if sao[s] == th and sao[s] == dh:
+                flags.append(f"{s}: đại tiểu hạn cùng gặp (TVCN1 L1839)")
+            elif sao[s] == th:
+                flags.append(f"{s} ở tiểu hạn")
+        if luu["L.Thái Tuế"] == th or "Thái Tuế" in S[th]:
+            if sao["Kình Dương"] in vung or sao["Đà La"] in vung:
+                flags.append("Thái Tuế + Kình/Đà (TVCN1 L1851)")
+        cat = [s for s in ("Hóa Lộc", "Hóa Quyền", "Hóa Khoa", "Lộc Tồn", "Tử Vi", "Thiên Phủ", "Thiên Giải",
+                           "Giải Thần") if sao[s] in vung]
+        cat += [k for k in ("L.Hóa Lộc", "L.Lộc Tồn", "L.Hóa Khoa") if luu[k] in (th, dh)]
+        out.append(f"{y} {can_chi(xc, xz):<9} {tuoi:>3}t ĐH {cc[dh]:<10} TH {cc[th]:<10}"
+                   f" | hung: {'; '.join(flags) or '-'} | giải/cát: {', '.join(cat) or '-'}")
+    return "\n".join(out)
+
+
+
+# ---------------------------------------------------------------- khung luận
+NAM_DAU = {"Thiên Phủ", "Thiên Cơ", "Thái Dương", "Liêm Trinh", "Thiên Lương", "Thất Sát", "Thiên Tướng"}
+BAC_DAU = {"Vũ Khúc", "Thái Âm", "Thiên Đồng", "Tham Lang", "Cự Môn", "Phá Quân"}  # TVCN1 L1415-2196
+NHOM_TT = {  # vòng Thái Tuế chia 4 bộ tam hợp (TT04 L338-367, TT07 L322-331)
+    0: "Thái Tuế–Quan Phù–Bạch Hổ (chính vị: trách vụ nặng, được đền công; TT04 L338-340)",
+    1: "Thiếu Dương–Tử Phù–Phúc Đức (tinh khôn, được tam đức; TT04 L363-367)",
+    2: "Tang Môn–Tuế Phá–Điếu Khách (phá hư, phải tranh đấu, vẫn hơn vị trí 'thiếu'; TT07 L322-331)",
+    3: "Thiếu Âm–Long Đức–Trực Phù (thật thà, hay thua thiệt; TT04 L363-367)",
+}
+SAT = {"Kình Dương", "Đà La", "Địa Không", "Địa Kiếp", "Hỏa Tinh", "Linh Tinh", "Thiên Hình", "Hóa Kỵ",
+       "Thiên Không", "Kiếp Sát"}
+CAT = {"Tả Phụ", "Hữu Bật", "Văn Xương", "Văn Khúc", "Thiên Khôi", "Thiên Việt", "Hóa Lộc", "Hóa Quyền",
+       "Hóa Khoa", "Lộc Tồn", "Thiên Mã", "Long Trì", "Phượng Các", "Ân Quang", "Thiên Quý"}
+
+
+def chieu(p):
+    """Tam phương tứ chính + nhị hợp + giáp của cung p."""
+    return {"tam_hop": [m12(p + 4), m12(p + 8)], "xung": m12(p + 6),
+            "nhi_hop": m12(1 - p), "giap": [m12(p - 1), m12(p + 1)]}
+
+
+def khung_luan(r):
+    """Các dữ kiện cấu trúc phải có trước khi luận (SKILL.md mục Luận). Không phán, chỉ tính."""
+    R = r["_raw"]
+    yz, cc, S = R["yz"], R["cung_chuc"], R["S"]
+    L = []
+
+    def ten(p):
+        c = r["cung"][p]
+        return f"{c['chuc']}({c['chi']}): {', '.join(c['chinh']) or 'VCĐ'}"
+
+    m = r["menh"]
+    tuoi_duong = R["duong"]
+    cung_duong = m % 2 == 0
+    L.append("== KHUNG LUẬN (dữ kiện tính sẵn, chưa phải lời phán) ==")
+    L.append(f"Âm dương: tuổi {'dương' if tuoi_duong else 'âm'}, Mệnh ở cung {'dương' if cung_duong else 'âm'}"
+             f" → {'THUẬN lý' if tuoi_duong == cung_duong else 'NGHỊCH lý'} (TT09 L8-10)")
+    vt = (m - yz) % 4
+    L.append(f"Mệnh trong vòng Thái Tuế: sao {next(s for s in S[m] if s in ('Thái Tuế','Thiếu Dương','Tang Môn','Thiếu Âm','Quan Phù','Tử Phù','Tuế Phá','Long Đức','Bạch Hổ','Phúc Đức','Điếu Khách','Trực Phù'))}"
+             f" → bộ {NHOM_TT[vt]}")
+    L.append(f"Tràng Sinh: Mệnh ở {R['trang_sinh'][m]}, Thân ở {R['trang_sinh'][r['than']]}")
+    hoa = {k: r["sao"][k] for k in ("Hóa Lộc", "Hóa Quyền", "Hóa Khoa", "Hóa Kỵ")}
+    L.append("Tứ Hóa: " + "; ".join(f"{k} → {cc[v]}({CHI[v]})" for k, v in hoa.items()))
+    L.append("")
+    for i in range(12):
+        p = m12(m + i)
+        c, ch = r["cung"][p], chieu(p)
+        hl = quan_he(c["hanh"], r["hanh_menh"])
+        sat = [s for s in S[p] if s in SAT]
+        cat = [s for s in S[p] if s in CAT]
+        tt = ("Tuần " if c["tuan"] else "") + ("Triệt" if c["triet"] else "")
+        L.append(f"[{c['chuc']} · {c['chi']} · {c['hanh']}, {hl} với bản mệnh{' · ' + tt.strip() if tt else ''}]")
+        L.append(f"   thủ: {', '.join(c['chinh']) or 'VÔ CHÍNH DIỆU → mượn xung chiếu ' + ten(ch['xung'])}"
+                 f" | cát: {', '.join(cat) or '-'} | sát: {', '.join(sat) or '-'}")
+        L.append(f"   tam hợp: {ten(ch['tam_hop'][0])} + {ten(ch['tam_hop'][1])} | xung: {ten(ch['xung'])}"
+                 f" | nhị hợp: {ten(ch['nhi_hop'])} | giáp: {ten(ch['giap'][0])} & {ten(ch['giap'][1])}")
+    L.append("")
+    L.append("Đại hạn (tuổi âm · cung · chính tinh · Nam/Bắc đẩu; TVCN1 L1839: "
+             f"{'Dương nam/Âm nữ hợp Nam đẩu' if R['d'] == 1 else 'Âm nam/Dương nữ hợp Bắc đẩu'}):")
+    for i in range(12):
+        p = m12(m + R["d"] * i)
+        c = r["cung"][p]
+        nd = [s for s in c["chinh"] if s in NAM_DAU]
+        bd = [s for s in c["chinh"] if s in BAC_DAU]
+        tag = (f" Nam đẩu: {', '.join(nd)}" if nd else "") + (f" Bắc đẩu: {', '.join(bd)}" if bd else "")
+        L.append(f"   {c['dai_han']:>3}-{c['dai_han'] + 9:<3} {c['chuc']:<10} {c['chi']:<4} "
+                 f"{', '.join(c['chinh']) or 'VCĐ'}{' ·' + tag if tag else ''}"
+                 f"{' ·Tuần' if c['tuan'] else ''}{' ·Triệt' if c['triet'] else ''}")
+    if "nam_xem" in r:
+        x = r["nam_xem"]
+        L.append("")
+        L.append(f"Sao lưu năm {x['nam']} {x['can_chi']} (an theo quy tắc sao năm sinh với can chi năm xem;"
+                 " sách không có bảng riêng):")
+        by = {}
+        for k, v in x["luu"].items():
+            by.setdefault(v, []).append(k)
+        for p in sorted(by, key=lambda q: (q - m) % 12):
+            mark = (" ← ĐẠI HẠN" if p == x["dai_han"] else "") + (" ← TIỂU HẠN" if p == x["tieu_han"] else "")
+            L.append(f"   {cc[p]:<10} {CHI[p]:<4} {', '.join(by[p])}{mark}")
+        th = x["tieu_han"]
+        ch = chieu(th)
+        L.append(f"   Tiểu hạn {cc[th]}({CHI[th]}) chiếu: tam hợp {ten(ch['tam_hop'][0])} + {ten(ch['tam_hop'][1])}"
+                 f" | xung {ten(ch['xung'])}")
+        # Nguyệt hạn: tháng Giêng ở cung tính sẵn, các tháng sau đi thuận (TVCN1 L1325)
+        L.append("Nguyệt hạn (TVCN1 L1325 chỉ cho tháng Giêng; các tháng sau đi thuận như giờ/năm): " + "; ".join(
+            f"T{i + 1} {cc[m12(x['thang_gieng'] + i)]}({CHI[m12(x['thang_gieng'] + i)]})" for i in range(12)))
+    return "\n".join(L)
 
 
 # ---------------------------------------------------------------- in
@@ -498,6 +654,9 @@ def main():
     ap.add_argument("--hoa-linh-cung-chieu", action="store_true",
                     help="Hỏa Linh cùng đi thuận (Bắc phái); mặc định theo sách: ngược chiều nhau")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--gon", action="store_true", help="chỉ in lá số, bỏ khung luận")
+    ap.add_argument("--quet", type=int, metavar="N",
+                    help="quét hạn N năm từ --namxem (hoặc từ năm sinh), gắn cờ hung/cát từng năm")
     a = ap.parse_args()
 
     notes = []
@@ -530,11 +689,19 @@ def main():
         notes.append("Hỏa Linh an cùng chiều thuận (Bắc phái)")
     r["ghi_chu"] = notes
     if a.json:
+        r.pop("_raw")
         print(json.dumps(r, ensure_ascii=False, indent=1))
         return
     print(in_la_so(r, meta))
     for n in notes:
         print("Ghi chú:", n)
+    if not a.gon:
+        print()
+        print(khung_luan(r))
+    if a.quet:
+        print()
+        print(f"== QUÉT HẠN {a.quet} NĂM (cờ dữ kiện; hung = sát tinh tại/chiếu tiểu hạn, sao lưu đè đại/tiểu hạn) ==")
+        print(quet_han(r, a.namxem or ly, a.quet, ly))
 
 
 if __name__ == "__main__":
