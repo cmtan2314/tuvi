@@ -31,21 +31,26 @@ from build import DB, MD, THE  # noqa: E402
 
 books, cards = len(list(MD.glob("*.md"))), len(list(THE.glob("*.md")))
 print(f"sách: {books} file, thẻ: {cards} file, index: {DB.stat().st_size // 1024 if DB.exists() else 0} KB")
-if books < 12 or cards < 10:
+if books < 15 or cards < 13:
     bad.append("thiếu sách/thẻ")
-    print("HỎNG thiếu file trong references/books (cần 12) hoặc references/the (cần 10)")
+    print("HỎNG thiếu file trong references/books (cần 15) hoặc references/the (cần 13)")
 
 run("tra (tự dựng index nếu cần)", [PY, str(S / "tra"), "kinh duong"], "GỐC")
+run("tra chữ Hán (ZWDS)", [PY, str(S / "tra"), "--goc", "-b", "ZWDS", "天刑"], "GỐC ZWDS")
+run("tra Khâm Thiên (KTTH, KTSC)", [PY, str(S / "tra"), "--goc", "lai", "nhan", "cung"], "GỐC KT")
 run("laso.py lập lá số", [PY, str(S / "laso.py"), "--ngay", "18", "--thang", "2", "--nam", "1992",
                           "--gio", "17"], "Mệnh tại Tỵ")
-run("laso.py khung luận + quét hạn", [PY, str(S / "laso.py"), "--ngay", "14", "--thang", "5", "--nam", "2001",
-                                   "--gio", "18", "--namxem", "2026", "--quet", "3"], "L.Kình Dương ở đại hạn")
+# lá số kiểm thử là ngày giờ giả, không dùng ngày sinh người thật
+run("laso.py khung luận + quét hạn", [PY, str(S / "laso.py"), "--ngay", "3", "--thang", "9", "--nam", "1990",
+                                   "--gio", "10", "--namxem", "2026", "--quet", "3"], "L.Kình Dương ở đại hạn")
+run("laso.py khung Tứ Hóa Khâm Thiên", [PY, str(S / "laso.py"), "--ngay", "3", "--thang", "9", "--nam", "1990",
+                                     "--gio", "10", "--namxem", "2026"], "Tứ hóa đại hạn D Kỵ")
 import engine  # noqa: E402
 ok, why = engine.san_sang()
 if ok:
-    run("engine Bắc phái (đắc hãm) chạy được", [PY, str(S / "laso.py"), "--engine", "bacphai", "--ngay", "14",
-                                             "--thang", "5", "--nam", "2001", "--gio", "18", "--gon"], "Đà La(hãm)")
-    run("đối chiếu engine JS ↔ Python (20 lá số)", [PY, str(S / "doichieu.py"), "20"], "ĐỐI CHIẾU OK")
+    run("engine Bắc phái (đắc hãm) chạy được", [PY, str(S / "laso.py"), "--engine", "bacphai", "--ngay", "20",
+                                             "--thang", "11", "--nam", "1985", "--gio", "8", "--gon"], "Đà La(hãm)")
+    run("đối chiếu engine JS ↔ Python: sao + phi hóa (20 lá số)", [PY, str(S / "doichieu.py"), "20"], "ĐỐI CHIẾU OK")
 else:
     print(f"CHÚ Ý engine Bắc phái không chạy: {why} -> laso.py tự dùng Python theo sách, KHÔNG có đắc hãm")
 run("test_laso.py (an sao khớp sách)", [PY, str(S / "test_laso.py")], "TẤT CẢ ĐÚNG")

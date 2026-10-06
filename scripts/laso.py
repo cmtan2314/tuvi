@@ -765,6 +765,9 @@ def main():
     if not a.gon:
         print()
         print(khung_luan(r))
+        import khamthien
+        print()
+        print(khamthien.phan_tich(r))
     if a.quet:
         print()
         print(f"== QUÉT HẠN {a.quet} NĂM (cờ dữ kiện; hung = sát tinh tại/chiếu tiểu hạn, sao lưu đè đại/tiểu hạn) ==")

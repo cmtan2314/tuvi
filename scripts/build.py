@@ -19,11 +19,22 @@ BOOKS = {
     "TVNL-TT01.md": "TT01", "TVNL-TT02.md": "TT02", "TVNL-TT03.md": "TT03",
     "TVNL-TT04.md": "TT04", "TVNL-TT05.md": "TT05", "TVNL-TT07.md": "TT07",
     "TVNL-TT08.md": "TT08", "TVNL-TT09.md": "TT09",
+    "Kham Thien Tu Hoa - Dai Hoa.md": "KTTH",
+    "Kham Thien Tu Hoa So Cap - Chien Nguyen.md": "KTSC",
+    "Tu Vi Dau So - Dao Tang (Han van).md": "ZWDS",
     "Tu Vi Chi Nam_phan I.md": "TVCN1", "Tu Vi Chi Nam_phan II.md": "TVCN2",
     # "phần III" và "phần cuối" thực chất là lịch vạn niên, không có nội dung Tử Vi
     "Tu Vi Chi Nam_phan III.md": "LICH3", "Tu Vi Chi Nam_phan cuoi.md": "LICH",
 }
 LICH_FROM = {"TVCN2": 2290}  # từ dòng này trở đi là bảng lịch
+
+# chữ Hán viết liền, không có dấu cách: tách từng chữ thành một token cho FTS5
+CJK = re.compile(r"([\u3400-\u9fff\uf900-\ufaff])")
+
+
+def tok(s: str) -> str:
+    return CJK.sub(r" \1 ", s)
+
 
 PAGE_RE = re.compile(r"<!--\s*(?:scan p0*(\d+)|trang (\d+))[^>]*-->")
 
@@ -99,7 +110,7 @@ def main():
             continue
         cut = LICH_FROM.get(book, 10**9)
         rows = [
-            (fold(heading + "\n" + t), book if a < cut else "LICH2", fname, pg, heading, a, b, t)
+            (tok(fold(heading + "\n" + t)), book if a < cut else "LICH2", fname, pg, heading, a, b, t)
             for pg, heading, a, b, t in chunks_of(p)
         ]
         con.executemany("INSERT INTO c VALUES (?,?,?,?,?,?,?,?)", rows)
@@ -108,7 +119,7 @@ def main():
     for p in sorted(THE.glob("*.md")):
         book = "THE-" + p.stem
         rows = [
-            (fold(t), book, p.name, pg, h, a, b, t)
+            (tok(fold(t)), book, p.name, pg, h, a, b, t)
             for pg, h, a, b, t in card_chunks(p)
         ]
         con.executemany("INSERT INTO c VALUES (?,?,?,?,?,?,?,?)", rows)

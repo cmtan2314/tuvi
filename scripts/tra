@@ -6,7 +6,7 @@ Kết quả có 2 phần:
   GỐC  - đoạn trích sách gốc (references/books/*.md) kèm đường dẫn:dòng -> để kiểm chứng
 
   tra kinh da thin tuat           # mặc định: 2 thẻ + 5 trích đoạn gốc
-  tra -b TT03 tai tho             # chỉ trong một sách (TT01..TT09, TVCN1, TVCN2, LICH*)
+  tra -b TT03 tai tho             # chỉ trong một sách (TT01..TT09, TVCN1, TVCN2, KTTH, KTSC, ZWDS, LICH*)
   tra --goc -k 10 thuong su       # chỉ sách gốc, 10 kết quả
   tra --goc -f bach ho duong phu  # in nguyên văn cả đoạn gốc
   tra '"hoa ky" OR "hoa ki"'      # cú pháp FTS5 thô khi cần
@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build import DB, MD, THE, fold  # noqa: E402
+from build import DB, MD, THE, fold, tok  # noqa: E402
 
 WINDOW = 220
 CARD_MAX = 3000  # ký tự; thẻ dài hơn thì chỉ in các ý khớp
@@ -74,9 +74,10 @@ def search(con, terms, raw_q, where, wargs, k):
     if raw_q:
         queries = [raw_q]
     else:
-        quoted = [f'"{t}"' for t in terms]
+        # chữ Hán: mỗi cụm viết liền ("天刑") là một phrase gồm các chữ đã tách
+        quoted = [f'"{" ".join(tok(t).split())}"' for t in terms]
         # cụm liền > tất cả từ > bất kỳ từ nào
-        queries = [f'"{" ".join(terms)}"', " AND ".join(quoted), " OR ".join(quoted)]
+        queries = [f'"{" ".join(tok(" ".join(terms)).split())}"', " AND ".join(quoted), " OR ".join(quoted)]
     seen, out = set(), []
     for fq in queries:
         rows = con.execute(
@@ -98,7 +99,7 @@ def main():
     ap.add_argument("query", nargs="+")
     ap.add_argument("-k", type=int, default=5, help="số trích đoạn gốc (mặc định 5)")
     ap.add_argument("-t", type=int, default=2, help="số thẻ (mặc định 2)")
-    ap.add_argument("-b", "--book", help="giới hạn một sách: TT01..TT09, TVCN1, TVCN2, LICH, LICH2, LICH3")
+    ap.add_argument("-b", "--book", help="giới hạn một sách: TT01..TT09, TVCN1, TVCN2, KTTH, KTSC, ZWDS, LICH, LICH2, LICH3")
     ap.add_argument("-f", "--full", action="store_true", help="in nguyên văn cả đoạn gốc và cả thẻ dài")
     ap.add_argument("--goc", action="store_true", help="chỉ tra sách gốc")
     ap.add_argument("--the", action="store_true", help="chỉ tra thẻ")
@@ -108,7 +109,8 @@ def main():
     ensure_index()
     con = sqlite3.connect(DB)
     q = " ".join(a.query)
-    raw_q = fold(q) if (a.raw or re.search(r'"| OR | NOT | NEAR', q)) else None
+    # fold() hạ chữ thường, phải trả lại toán tử FTS5 viết hoa
+    raw_q = re.sub(r"\b(or|and|not|near)\b(?=[^\"]*(?:\"[^\"]*\"[^\"]*)*$)", lambda m: m.group(1).upper(), tok(fold(q))) if (a.raw or re.search(r'"| OR | NOT | NEAR', q)) else None
     terms = re.findall(r"\w+", fold(q))
     book = a.book.upper() if a.book else None
 

@@ -1,6 +1,6 @@
 ---
 name: tu-vi
-description: Lập và luận lá số Tử Vi Đẩu Số; tra sách Tử Vi (Tử Vi Nghiệm Lý Toàn Thư – Thiên Lương tập 1–9, Tử Vi Chỉ Nam – Song An). Use when the user gives a birth date/time and wants a Tử Vi chart (lá số, an sao, 12 cung, đại hạn, tiểu hạn, năm xem), asks about a sao/cung/cách cục/đắc hãm/vòng Thái Tuế/Tuần Triệt/Tứ Hóa, or wants a claim checked against these books. Not for Tứ Trụ / Bát Tự (use tu-tru).
+description: Lập và luận lá số Tử Vi Đẩu Số; tra sách Tử Vi (Tử Vi Nghiệm Lý Toàn Thư – Thiên Lương tập 1–9, Tử Vi Chỉ Nam – Song An; Khâm Thiên Tứ Hóa – Đại Hoa và Sơ Cấp – Chiến Nguyễn; 紫微斗數 bản Đạo Tạng, Hán văn). Use when the user gives a birth date/time and wants a Tử Vi chart (lá số, an sao, 12 cung, đại hạn, tiểu hạn, năm xem), asks about a sao/cung/cách cục/đắc hãm/vòng Thái Tuế/Tuần Triệt/Tứ Hóa, Khâm Thiên phi hóa/tự hóa/lai nhân cung, or wants a claim checked against these books. Not for Tứ Trụ / Bát Tự (use tu-tru).
 ---
 
 # Tử Vi: lập lá số, tra sách, luận có lý
@@ -28,11 +28,25 @@ Trả lời bằng tiếng Việt, viết thẳng trong chat. Dẫn nguồn theo
 
 ## Quy trình
 
-**A. Người dùng đưa ngày giờ sinh: luận ĐẦY ĐỦ, không tóm tắt**
+**A. Người dùng đưa ngày giờ sinh: luận ĐẦY ĐỦ bằng 5 agent, agent chính tổng hợp**
+
+Đọc `<skill>/references/dieu-phoi.md` và làm đúng theo đó. Tóm tắt:
 1. Cần đủ ngày, tháng, năm, giờ, giới tính, và biết là dương hay âm lịch. Thiếu giới tính thì hỏi. Giờ sinh sát ranh canh giờ (ví dụ 12h55) thì lập cả hai lá số, hoặc hỏi lại.
-2. Chạy `laso.py ... --namxem <năm nay> --quet 20`. Lệnh in ra lá số, **KHUNG LUẬN** (tam phương tứ chính từng cung, âm dương, vòng Thái Tuế, Tứ Hóa, đại hạn, sao lưu, nguyệt hạn) và **QUÉT HẠN** (cờ hung, cát từng năm).
-3. **Đọc `<skill>/references/luan.md` rồi viết đúng khuôn trong đó.** Bài gồm 8 phần: tổng quan và cách cục, tính cách, từng lĩnh vực (nghề, tiền, hôn nhân, con, sức khỏe…), mọi đại hạn, năm xem theo 12 tháng, bảng hạn hung, lời khuyên, ghi chú phương pháp. Thường **6.000–10.000 từ**. Mọi sao đều có độ sáng. Mọi lời sách cổ được **dịch sang hoàn cảnh hiện đại** (luan.md §4). Giải nghĩa thuật ngữ cho người không biết Tử Vi.
-4. Trước khi viết phải tra (chạy song song): chính tinh theo 12 cung, đắc hãm theo sách để đối chiếu với engine, các cách cục nghi có, các sát tinh lớn, mục nghề nghiệp. Bài đạt yêu cầu không được có các lỗi sau:
+2. Chạy `laso.py ... --namxem <năm nay> --quet 35` rồi lưu vào thư mục làm việc **trong scratchpad**. Không bao giờ ghi ngày sinh hay bài luận của người thật vào thư mục skill. Lệnh in ra lá số, **KHUNG LUẬN** (tam phương tứ chính từng cung, âm dương, vòng Thái Tuế, Tứ Hóa, đại hạn, sao lưu, nguyệt hạn), **KHUNG TỨ HÓA** theo phái Khâm Thiên (lai nhân, phi hóa 12 cung, tự hóa, song tượng, các cách Kỵ, tứ hóa đại hạn và lưu niên) và **QUÉT HẠN** (cờ hung, cát từng năm).
+3. **Giao việc cùng lúc cho 5 agent**, mỗi agent luận cả lớp Tam Hợp lẫn lớp Tứ Hóa:
+   - K1 Mệnh–Tài–Quan;
+   - K2 Phu–Di–Phúc;
+   - K3 Huynh–Tật–Điền;
+   - K4 Tử–Nô–Phụ;
+   - H: mọi đại hạn, năm xem 12 tháng, bảng hạn hung.
+
+   Mỗi agent khối xét cả khối xung chiếu với khối mình. Mẫu prompt ở `dieu-phoi.md` §4–§5.
+4. **Agent chính tổng hợp:**
+   - soát và gỡ mâu thuẫn giữa các agent;
+   - viết phần I (tổng quan, bản đồ bốn khối, Tứ Hóa tổng quan), VII (tổng kết, lời khuyên), VIII (phương pháp);
+   - ghép bài, chạy danh sách tự kiểm ở `luan.md` §6;
+   - in toàn văn trong chat, kèm đường dẫn file.
+5. **Không giới hạn trên, có mức sàn:** mỗi phần phải dài hơn mức sàn ghi ở `luan.md` §3, tức mức tối đa cũ: I ≥ 600 từ, II ≥ 1.200, mỗi mục III ≥ 900, mỗi đại hạn ≥ 450, năm xem ≥ 1.800, VII ≥ 600. Toàn bài trên 10.000 từ. Mọi sao đều có độ sáng. Mọi lời sách cổ được **dịch sang hoàn cảnh hiện đại** (luan.md §4). Giải nghĩa thuật ngữ cho người không biết Tử Vi. Bài đạt yêu cầu không được có các lỗi sau:
    - chỉ dán nhãn sao ("có Lộc nên có tiền") mà thiếu cơ chế, thời điểm và lời khuyên;
    - có mục "hạn chế: chưa tra…".
 
@@ -98,6 +112,8 @@ Gõ không dấu cũng được, và kết quả chịu được lỗi dấu do 
 
 Mẹo:
 - Dùng 2–4 từ đặc trưng, ví dụ `thien hinh dan`. Đừng gõ cả câu hỏi.
+- Tra được cả chữ Hán, ví dụ `tra 天刑 拱限`. Mỗi cụm chữ Hán viết liền được tra như một cụm. Gõ tiếng Việt thì trúng thẻ ZWDS, gõ chữ Hán thì trúng nguyên văn.
+- Ảnh lá số và bảng trong hai sách Khâm Thiên đã được chép thành chữ, nằm trong khối `[HÌNH pNNN …] … [/HÌNH]`, tra được như văn bản thường.
 - Không thấy kết quả thì bớt từ, hoặc thử cách viết khác: `ky`/`ki`, `ty`/`ti`.
 - Nghi OCR sai mà máy có ảnh scan hay PDF gốc thì xem trang `pNNN` tương ứng. Skill không mang theo ảnh hay PDF.
 
@@ -105,6 +121,9 @@ Mẹo:
 |---|---|---|
 | TVCN1, TVCN2 | Tử Vi Chỉ Nam (Song An Đỗ Văn Lưu) | Tra cứu chuẩn: ý nghĩa sao theo cung, miếu hãm, cách cục, hạn, nghề nghiệp, phú Lê Quý Đôn (TVCN2 L1656). Chữ khá sạch |
 | TT01–TT09 (không có TT06) | Tử Vi Nghiệm Lý Toàn Thư (Thiên Lương) | Nguyên lý: âm dương, vòng Thái Tuế, Tài Thọ, Thương Sứ, nhị hợp, ngoại lệ, lá số người thật. OCR bẩn, trang scan không theo thứ tự bài |
+| KTTH | Giáo Trình Khâm Thiên Tứ Hóa (Đại Hoa, bản dịch Chiến Nguyễn) | Phái **Khâm Thiên Tứ Hóa**: lai nhân cung, tứ hóa năm sinh, phi cung tứ hóa, tự hóa, tam tượng nhất vật, ý nghĩa 18 sao theo người/vật, hôn nhân, lục thân, bệnh tật. Chữ sạch (lớp chữ PDF) |
+| KTSC | Khâm Thiên Tứ Hóa Sơ Cấp (Chiến Nguyễn) | Cùng phái: tự hóa ly tâm/hướng tâm, cung vị chuyển đổi 12 cung, Kính Tâm Quyết, Phá tượng thần công, Kỵ tinh kỳ phổ, Lộc nhân Kỵ quả, 7 lá số ví dụ |
+| ZWDS | 紫微斗數 (bản Đạo Tạng, 3 quyển, Hán văn phồn thể) | Nguồn cổ, hệ **18 phi tinh** an theo năm/giờ, không có 14 chính tinh, Tứ Hóa hay ngũ hành cục. Sách gốc là chữ Hán; thẻ là bản dịch tóm tắt tiếng Việt kèm chữ Hán |
 | LICH, LICH2, LICH3 | Bảng lịch vạn niên | Không tra. Đổi lịch bằng `laso.py` |
 
 ## Luận: kỷ luật suy luận
@@ -132,7 +151,10 @@ Lá số là một hệ có cơ chế: ngũ hành, âm dương, tam hợp, xung 
    - Đắc hãm của Đà La: TVCN1 L2281 chép bảng của Kình, trong đó có cả Tý Ngọ Mão Dậu, nơi Đà không bao giờ đứng được. Engine Bắc phái chấm hãm. TT03 L344-354 lại coi Đà ở Dần Thân Tỵ Hợi hợp Mệnh Kim là đắc cách. Phải cân cả ba nguồn, xem `luan.md` §7.
    - Một câu sách nêu vị trí mà sao **không thể đứng được** theo cách an sao là dấu hiệu chép sai. Đối chiếu bằng `laso.py`.
    - Chỗ in sai đã sửa được đánh dấu ngay trong thẻ. Chỗ chưa chắc ghi `(?)`.
-5. **Hai bộ sách, hai lối.** TVCN theo phú cổ. TVNL lý giải bằng âm dương và Thái Tuế, hay nêu ngoại lệ. Khi hai bộ lệch nhau, nêu cả hai rồi để cấu trúc lá số quyết định.
+5. **Ba trường phái, không trộn lẫn.**
+   - **Tam Hợp (TVCN, TVNL):** TVCN theo phú cổ. TVNL lý giải bằng âm dương và Thái Tuế, hay nêu ngoại lệ. Khi hai bộ lệch nhau, nêu cả hai rồi để cấu trúc lá số quyết định. Bài luận theo `luan.md` dựa trên phái này.
+   - **Khâm Thiên Tứ Hóa (KTTH, KTSC):** chỉ dùng 18 sao, gồm 14 chính tinh và Tả Hữu Xương Khúc. Luận bằng can cung phi hóa, gồm Lộc, Quyền, Khoa, Kỵ, cùng tự hóa, lai nhân cung và cung vị chuyển đổi. Không dùng phụ tinh hay đắc hãm theo kiểu Tam Hợp. Dữ kiện của phái này lấy ở **KHUNG TỨ HÓA** do `laso.py` in ra (`scripts/khamthien.py`). Khung tính trên vị trí sao của engine, và phi hóa đã được đối chiếu khớp với engine Bắc phái. Bài luận dùng Tứ Hóa làm lớp thứ hai trong mọi phần, theo `luan.md` §2b. Tuổi Canh trong phái này là Khoa Âm, Kỵ Đồng, giống engine Bắc phái. Chữ "tam phương" và "tứ chính" trong sách Khâm Thiên mang nghĩa khác với Tam Hợp: tứ chính là bản cung, cung xung và hai cung vuông góc; tam phương là bản cung và hai cung tam hợp (KTSC L468-470). Phái này cũng gán ngũ hành cho sao theo thiên can, ví dụ Thiên Lương là Mậu Thổ (KTTH L1471-1483), không phải Mộc như ở `luan.md`. Khi luận Tam Hợp thì vẫn dùng ngũ hành của Tam Hợp. Bản KTTH không đầy đủ: mục Kính Tâm Quyết bị cắt dở ở L1987, và các chương Phá tượng, Kỵ tinh kỳ phổ, Lộc nhân Kỵ quả chỉ có trong mục lục. Các nội dung đó tra ở KTSC. Hai sách còn lệch nhau ở vài điểm, chẳng hạn hóa nào là "duyên khởi", hay cung nào là "phu thê thứ hai". Thẻ có ghi lại các chỗ lệch; gặp thì nêu cả hai. Phải nói rõ là đang luận theo Khâm Thiên. Viết lớp Tam Hợp trước, lớp Tứ Hóa sau, rồi nói rõ hai lớp cùng chiều hay ngược chiều. Không trộn hai phái thành một câu kết.
+   - **ZWDS (紫微斗數 Đạo Tạng):** hệ 18 phi tinh cổ, pha Thất Chính Tứ Dư. Có những sao **trùng tên mà khác nghĩa** với hệ hiện đại: "Tử Vi" là một trong 12 sao an theo năm sinh, Hồng Loan là Thái Âm, Thiên Hình là Kế Đô, Thiên Khố là Hữu Bật. Cách an Mệnh, Thân, đại hạn, tiểu hạn và 12 cung (có cung Tướng Mạo) cũng khác. Chỉ dùng để khảo nguồn gốc hoặc so sánh, **không dùng ZWDS để luận lá số do `laso.py` lập**. Các chỗ nguyên bản khuyết hoặc lỗi đã được đánh dấu `(?)` trong thẻ.
 6. **Phụ Mẫu và Huynh Đệ:** TVCN1 tự nhận phần này "sai 7–8 phần" (TVCN1 L5830 trở đi). Không phán chắc ở hai cung này.
 7. **Áp dụng vào đời sống hiện đại.** Sách viết cho xã hội cũ, phải dịch theo *bản chất của sao* chứ không dịch từng chữ. Ví dụ: "làm quan" là có vị trí quản lý hoặc vào công chức; "đầy tớ" là cấp dưới, đồng nghiệp; "ruộng" là bất động sản; "chết đường" là tai nạn giao thông. Bảng đối chiếu và bảng nghề theo chính tinh nằm ở `luan.md` §4. Khi diễn giải phải nói rõ đó là suy luận.
 
@@ -152,9 +174,9 @@ Lá số là một hệ có cơ chế: ngũ hành, âm dương, tam hợp, xung 
 Skill gồm:
 - `scripts/`;
 - `engine/`: code Bắc phái và `package.json`. Không đưa `node_modules` và link `node` vào git;
-- `references/books/`: sách dạng .md;
+- `references/books/`: sách dạng .md. Ba sách KTTH, KTSC, ZWDS được chuyển từ PDF và epub, lấy lớp chữ chứ không OCR; ảnh được chép tay vào khối `[HÌNH]`;
 - `references/the/`: thẻ;
-- `references/an-sao.md`, `references/luan.md`.
+- `references/an-sao.md`, `references/luan.md`, `references/dieu-phoi.md` (điều phối 5 agent luận).
 
 File `references/tuvi.db` có thể xóa, vì nó được dựng lại tự động. Chép cả thư mục sang máy khác rồi chạy `npm install` trong `engine/` là dùng được.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Đối chiếu engine Bắc phái (JS) với laso.py (Python) trên N lá số ngẫu nhiên.
+"""Đối chiếu engine Bắc phái (JS) với laso.py + khamthien.py (Python) trên N lá số ngẫu nhiên: vị trí sao và phi hóa 12 cung.
 
 Hai engine viết độc lập; Python lập theo quy ước Bắc phái (Hỏa Linh cùng chiều, Canh Khoa Âm Kỵ Đồng,
 nhuận = tháng chính) thì mọi sao chung phải trùng, TRỪ các sao đã biết là khác quy ước:
@@ -14,7 +14,13 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 
 import engine
+import khamthien
 import laso
+
+# tên cung engine -> tên cung khamthien
+EC = {"mệnh": "Mệnh", "bào": "Huynh Đệ", "phu": "Phu Thê", "phối": "Phu Thê", "tử": "Tử Tức", "tài": "Tài Bạch",
+      "tật": "Tật Ách", "di": "Thiên Di", "nô": "Nô Bộc", "quan": "Quan Lộc", "điền": "Điền Trạch",
+      "phúc": "Phúc Đức", "phụ": "Phụ Mẫu"}
 
 BIET = {"Thiên Thương", "Thiên Sứ", "Thiên Khôi", "Thiên Việt", "Thiên Quan"}
 
@@ -25,8 +31,19 @@ def mot(c):
     ld, lm, ly, _ = laso.solar_to_lunar(d, m, y, 7.0)
     r = laso.lap_la_so(ld, lm, ly, laso.gio_chi(h), not nu, canh_ky_dong=True, hoa_linh_cung_chieu=True)
     pe = engine.vi_tri(e)
-    return c, [(t, laso.CHI[p], laso.CHI[pe[t][0]]) for t, p in r["sao"].items()
-               if t in pe and t not in BIET and pe[t][0] != p]
+    lech = [(t, laso.CHI[p], laso.CHI[pe[t][0]]) for t, p in r["sao"].items()
+            if t in pe and t not in BIET and pe[t][0] != p]
+    # phi hóa 12 cung: khamthien.py (Python) so với engine
+    B = khamthien.Ban(r["menh"], r["_raw"]["can_cung"], r["sao"])
+    for p, ce in e["cung"].items():
+        eng = {}
+        for x in ce["phi_hoa"]:
+            hoa, _, dich = x.partition(" ")
+            eng[hoa] = p if "tự hóa" in dich else B.vi[EC[dich.split()[-1]]]
+        py = {hoa: q for hoa, _, q in B.phi(p)}
+        if eng and eng != py:  # engine đôi khi bỏ trống phi hóa (năm sinh tương lai)
+            lech.append(("phi hóa " + laso.CHI[p], py, eng))
+    return c, lech
 
 
 def main():

@@ -2,10 +2,11 @@
 
 Người đọc không biết Tử Vi và sống ở **thời hiện đại**. Một bài đạt yêu cầu phải:
 - **đủ**: mọi phần ở mục 2;
+- **hai lớp**: lớp Tam Hợp (sao, đắc hãm, cách cục) và lớp **Tứ Hóa** (phi hóa, tự hóa, Kỵ; mục 2b) trong *mọi* phần của bài;
 - **sâu**: mỗi nhận định có chuỗi *dữ kiện → cơ chế → ý nghĩa đời thường → thời điểm → lời khuyên*;
 - **cân**: mọi sao đều xét đắc hay hãm. Chỗ nào nguồn mâu thuẫn thì suy luận rồi nói rõ đã chọn gì, vì sao;
 - **hiện đại**: dịch lời sách cổ sang hoàn cảnh ngày nay (mục 4);
-- **dài**: thường **6.000–10.000 từ** cho một lá số đầy đủ;
+- **không giới hạn trên, có mức sàn**: mỗi phần phải dài **hơn** mức sàn ghi ở tiêu đề của nó (mức tối đa cũ). Toàn bài tối thiểu **10.000 từ**; với 5 agent thì thường trên 20.000 từ. Không cắt bớt vì sợ dài, không gộp ý cho gọn;
 - **dễ hiểu**: thuật ngữ nào cũng giải nghĩa ngay lần đầu xuất hiện.
 
 Không được:
@@ -14,9 +15,10 @@ Không được:
 
 ## 1. Chuẩn bị (làm xong mới viết)
 
-1. Chạy `python3 <skill>/scripts/laso.py ... --namxem <năm nay> --quet 25`. Lệnh in ra ba thứ:
+1. Chạy `python3 <skill>/scripts/laso.py ... --namxem <năm nay> --quet 25`. Lệnh in ra bốn thứ:
    - **Lá số.** Mặc định dùng engine Bắc phái: mỗi sao có độ sáng *miếu > vượng > đắc > bình > nhàn > hãm*, kèm phi hóa và sao lưu Bắc phái (Đv. đại vận, L. lưu niên).
    - **KHUNG LUẬN**: âm dương, vòng Thái Tuế, Tràng Sinh, Tứ Hóa, tam phương tứ chính từng cung (kèm độ sáng), đại hạn, sao lưu, nguyệt hạn.
+   - **KHUNG TỨ HÓA** (phái Khâm Thiên): lai nhân cung, nguyên thần cung, tứ hóa năm sinh kèm nam/nữ tinh, phi hóa 12 cung có tên sao, tự hóa ly tâm và hướng tâm, song tượng và phá tượng, các cách Kỵ, tứ hóa đại hạn và lưu niên kèm cờ. Khung tính trên đúng vị trí sao của engine.
    - **QUÉT HẠN**: cờ hung và cát cho từng năm.
 
    Đọc dòng `Ghi chú` để biết đang dùng engine nào và những sao nào Bắc phái an khác sách.
@@ -25,12 +27,14 @@ Không được:
    - đắc hay hãm theo sách của từng chính tinh và sát tinh quan trọng, để đối chiếu với engine: `tra thien dong dan`, `tra da la ham`;
    - các **cách cục** nghi có (cụm sao ở tam hợp): `tra thach trung an ngoc`, `tra co nguyet dong luong`, `tra vo chinh dieu`…;
    - các sát tinh lớn ở Mệnh, Thân và những cung hạn sắp tới;
-   - mục "nghề nghiệp" (TVCN2 L1298-1652) theo các sao ở Quan Lộc và Mệnh.
+   - mục "nghề nghiệp" (TVCN2 L1298-1652) theo các sao ở Quan Lộc và Mệnh;
+   - **mỗi cờ trong KHUNG TỨ HÓA**: đọc thẻ của cách đó, ví dụ `tra -b KTSC tiet kho ky`, `tra -b KTSC thuy menh ky`, `tra -b KTSC pha tuong`; hàm nghĩa cung có lai nhân, ví dụ `tra -b KTSC lai nhan tat ach`; mục hôn nhân, lục thân, bệnh tật của KTTH khi luận các phần đó.
 3. Ghi nháp cho từng cung (đủ 12 cung rồi mới viết):
    - sao gì, độ sáng theo engine và theo sách, có khớp nhau không;
    - sinh khắc với bản mệnh;
    - tam hợp và xung chiếu;
    - Tuần, Triệt;
+   - **Tứ Hóa**: cung có hóa năm sinh nào, tự hóa gì, nhận Lộc/Kỵ từ cung nào, phi Lộc/Kỵ đi đâu;
    - kết luận cân được.
 
 ## 2. Đắc hãm: dùng thế nào, khi lệch thì làm gì
@@ -53,16 +57,31 @@ Không được:
 
   Ghi rõ sao đang được nâng hay bị kéo bởi cái gì.
 
-## 3. Các phần của bài (theo thứ tự)
+## 2b. Tứ Hóa (phái Khâm Thiên): dùng thế nào
 
-### I. Tổng quan lá số (400–600 từ)
+Dữ kiện lấy ở KHUNG TỨ HÓA, không tự nhẩm. Cách đọc:
+- **Hóa năm sinh là "thể", tự hóa và phi hóa là "dụng"** (KTSC L1675). Hóa năm sinh nói việc gốc của đời; tự hóa nói việc đó động ra sao; phi hóa nói nó chảy về đâu.
+- **Đơn tượng không cát hung, song tượng mới thành việc** (KTSC L197-217). Một Hóa Lộc đứng một mình chỉ là khuynh hướng. Kết luận cát hung chỉ đưa ra khi có song tượng: hai hóa cùng cung, hóa năm sinh gặp tự hóa, hay Lộc ở cung này mà Kỵ ở cung kia cùng một tổ.
+- **Lộc nhân Kỵ quả**: thấy Lộc thì đi tìm Kỵ. Lộc ở đâu là chỗ duyên khởi, Kỵ ở đâu là chỗ kết quả, chỗ "nợ" (KTSC L1671-1690).
+- **Lai nhân cung** là chốt khởi động của đời. Viết nó vào phần I và đọc hàm nghĩa theo cung (KTSC Tiết 6–7).
+- **Kỵ là trục chính để báo hạn.** Đọc cờ Kỵ của bàn gốc, đại hạn, lưu niên theo nguyên tắc cấp dưới xung cấp trên: lưu niên xung đại hạn, đại hạn xung bản mệnh (KTSC L1641).
+- **Không trộn hai phái thành một câu kết.** Viết lớp Tam Hợp trước, lớp Tứ Hóa sau, rồi nói rõ hai lớp **cùng chiều** (tăng độ tin) hay **ngược chiều** (giải thích vì sao, lớp nào nặng hơn ở việc này). Ví dụ: Tam Hợp thấy Tài có Lộc Tồn, Tứ Hóa thấy tiết khố kị; kết luận là kiếm được nhưng khó giữ, rồi chỉ ra cơ chế của từng lớp.
+- **Thuật ngữ Khâm Thiên khác Tam Hợp.** "Tứ chính", "tam phương" trong sách Khâm Thiên mang nghĩa khác (KTSC L468-470). Ngũ hành sao theo can là của riêng phái này. Giải nghĩa mọi thuật ngữ cho người đọc: lai nhân, tự hóa ly tâm, hướng tâm, các cách Kỵ.
+- Cờ trong khung chỉ là **điều kiện đủ theo sách**. Mỗi cờ phải tra thẻ, đọc đúng nghĩa, rồi dịch sang đời sống hiện đại như mục 4.
+
+## 3. Các phần của bài
+
+Bài được viết bởi nhiều agent theo **khối tam hợp** (xem `dieu-phoi.md`). Các phần dưới đây là **yêu cầu nội dung**; bảng phân công trong `dieu-phoi.md` cho biết agent nào viết phần nào. Bài hoàn chỉnh xếp theo thứ tự: I → bốn khối tam hợp (chứa II, III) → IV → V → VI → VII → VIII.
+
+### I. Tổng quan lá số (tối thiểu 600 từ)
 - Ngày giờ âm dương lịch, âm dương nam nữ, chiều đi.
 - Bản mệnh và cục kèm giải nghĩa hình ảnh. Ví dụ: "Bạch Lạp Kim là kim trong nến, chất quý nhưng cần lửa luyện; Hỏa lục cục khắc Kim, nghĩa là môi trường ép mình phải rèn".
 - Thuận lý hay nghịch lý âm dương. Vị trí Mệnh trong vòng Thái Tuế và ý nghĩa đối với thái độ sống.
 - **Cách cục chính**: tên cách, vì sao thành, cái gì phá hoặc giảm cách, mức độ thành cách, dẫn nguồn.
+- **Tứ Hóa tổng quan**: lai nhân cung và nguyên thần cung (đời xoay quanh việc gì); bốn hóa năm sinh nằm ở đâu, nam hay nữ tinh; trục Lộc nhân Kỵ quả; cung tự hóa nhiều nhất; các cờ Kỵ lớn của bàn gốc.
 - **Chân dung** 6–10 câu: người này là ai, mạnh ở đâu, yếu ở đâu, đời đi theo đường cong nào (sớm hay muộn, lên hay xuống).
 
-### II. Mệnh và Thân: tính cách, con người (800–1.200 từ)
+### II. Mệnh và Thân: tính cách, con người (tối thiểu 1.200 từ)
 - Chính tinh thủ Mệnh và độ sáng. Mệnh vô chính diệu thì nói mượn sao nào, theo quy tắc nào (TVCN2 L1117-1126), cộng với tam hợp.
 - Tính cách cụ thể, chia thành các mặt:
   - cách suy nghĩ;
@@ -79,8 +98,16 @@ Không được:
 - Từng sát tinh ở Mệnh: đắc hay hãm, hợp hay khắc bản mệnh, có được chế không. Kết luận là hại hay thành lợi.
 - Tuần, Triệt ở Mệnh hoặc Thân: tác động lên tuổi trẻ, và lúc nào thì "mở".
 
-### III. Từng lĩnh vực (mỗi mục 500–900 từ)
-Trình tự cho mỗi mục: **sao thủ (độ sáng) → tam hợp, xung chiếu → sinh khắc → cách → nghĩa đời thường hôm nay → thời điểm (đại hạn hay năm nào kích hoạt) → rủi ro → lời khuyên hành động**.
+### III. Từng lĩnh vực (mỗi mục tối thiểu 900 từ)
+Trình tự cho mỗi mục: **sao thủ (độ sáng) → tam hợp, xung chiếu → sinh khắc → cách → lớp Tứ Hóa → nghĩa đời thường hôm nay → thời điểm (đại hạn hay năm nào kích hoạt) → rủi ro → lời khuyên hành động**.
+
+Lớp Tứ Hóa của mỗi mục: cung chủ có hóa năm sinh hay tự hóa gì; phi Lộc, Kỵ đi đâu; nhận Lộc, Kỵ từ cung nào; cờ liên quan. Gợi ý theo mục:
+- sự nghiệp: thủy mệnh kị, nghịch thủy kị, thủy tiết kị (hợp làm công hay tự lập); Mệnh và Quan phi hóa vào lục nội hay lục ngoại (KTSC L324);
+- tiền: tuyến Tài–Phúc, Điền là kho; nhập khố kị, tiết khố kị; Tài phi Kỵ đi đâu là tiền chảy về đâu (lưu thủy kị);
+- hôn nhân: Phu Thê và Điền đủ âm dương hay cô âm, độc dương; Phu tự hóa; Mệnh và Phu phi hóa cho nhau (thị phi kị, oán thán kị); Lộc tự hóa Lộc ở Phu dễ ngoại tình (KTSC L1526-1531); xem thêm mục hôn nhân của KTTH;
+- con cái, lục thân: tuần hoàn kị, thị phi kị giữa các lục thân cung;
+- sức khỏe: Kỵ vào Tật hoặc xung Tật; mục lục thân và sức khỏe của KTTH (Huynh, Nô, Phúc là cung then chốt);
+- Thiên Di: sách mã kị (bôn ba, xa quê).
 
 1. **Sự nghiệp (Quan Lộc + Mệnh + Thiên Di).**
    - 5–8 **nghề hoặc vị trí cụ thể của thời nay**, mỗi nghề kèm lý do lấy từ sao.
@@ -109,18 +136,20 @@ Trình tự cho mỗi mục: **sao thủ (độ sáng) → tam hợp, xung chi�
 7. **Thiên Di.** Ra ngoài gặp quý nhân hay tiểu nhân; có hợp xuất ngoại, định cư, làm việc xa nhà không.
 8. **Cha mẹ, anh em, bạn bè, đồng nghiệp, cấp dưới (Phụ Mẫu, Huynh Đệ, Nô Bộc).** Luận đủ, nhưng nói rõ độ tin thấp (TVCN1 tự nhận phần này "sai 7–8 phần"). Thời nay, Nô Bộc là đồng nghiệp, cấp dưới, đối tác, bạn bè, cả mạng lưới quan hệ.
 
-### IV. Vận hạn trọn đời: từng đại hạn 10 năm (mỗi hạn 250–450 từ)
-Viết **tất cả** các đại hạn đến khoảng 85 tuổi. Đại hạn đã qua thì viết ngắn, nêu điểm để người đọc tự kiểm độ đúng.
+### IV. Vận hạn trọn đời: từng đại hạn 10 năm (mỗi hạn tối thiểu 450 từ)
+Viết **tất cả** các đại hạn đến khoảng 85 tuổi. Đại hạn đã qua cũng viết đủ, kèm các điểm cụ thể để người đọc tự kiểm độ đúng.
 
 Mỗi đại hạn gồm:
 - cung, sao thủ và độ sáng, tam hợp chiếu;
 - hành cung so với bản mệnh; Nam hay Bắc đẩu so với âm dương (TVCN1 L1839); Tuần, Triệt;
 - sao lưu đại vận Bắc phái (dòng `Lưu (Bắc phái)`, tiền tố `Đv.`), nếu có;
+- **tứ hóa đại hạn**: bốn hóa theo can của đại Mệnh rơi vào bản cung nào; đại Kỵ xung bản cung nào; cờ phản cung kị, tuyệt mệnh kị. KHUNG TỨ HÓA chỉ in sẵn đại hạn hiện tại. Đại hạn khác thì chạy lại `laso.py` với `--namxem` rơi vào hạn đó;
 - **chủ đề** của 10 năm và **mức độ**: tốt / khá / trung bình / xấu / rất xấu, kèm lý do;
 - việc nên làm trong hạn: học gì, đầu tư gì, cưới hay chưa, đổi việc hay chưa;
 - những năm cao điểm và năm phải đề phòng trong hạn, lấy từ QUÉT HẠN.
 
-### V. Năm đang xem (1.200–1.800 từ)
+### V. Năm đang xem (tối thiểu 1.800 từ)
+- **Tứ hóa lưu niên**: bốn hóa theo can năm rơi vào bản, đại và lưu cung nào; cờ Kỵ lưu niên (xung đại Mệnh, xung bản Mệnh hay Quan, lưu Di phi Kỵ).
 - Đại hạn, tiểu hạn, sao lưu đè lên đâu. Có hai bộ sao lưu: `L.*` do Python an theo quy tắc sao năm sinh, và `L.`/`N.` của Bắc phái.
 - Năm đó ở từng mặt: công việc, tiền, tình cảm, sức khỏe, pháp lý, đi lại.
 - **Từng tháng trong 12 tháng** theo nguyệt hạn. Mỗi tháng ghi cung, sao đáng chú ý, nên làm gì, tránh gì.
@@ -132,7 +161,8 @@ Lập bảng các năm có cờ nặng trong QUÉT HẠN. Cờ nặng gồm:
 - Kình Đà gặp Thái Tuế;
 - Thương Sứ, nhất là khi đại tiểu hạn cùng gặp;
 - Không Kiếp tại hạn;
-- lưu Kình hoặc lưu Kỵ đè lên đại hạn.
+- lưu Kình hoặc lưu Kỵ đè lên đại hạn;
+- cờ Kỵ của Tứ Hóa: tuyệt mệnh kị, phản cung kị, đại hoặc lưu Kỵ xung bản Mệnh hay Quan (chạy `laso.py --namxem <năm>` cho các năm nghi vấn).
 
 Mỗi dòng của bảng gồm:
 - năm và tuổi;
@@ -144,13 +174,13 @@ Mỗi dòng của bảng gồm:
 
 Nói thẳng, không né, nhưng không dọa.
 
-### VII. Tổng kết và lời khuyên (400–600 từ)
+### VII. Tổng kết và lời khuyên (tối thiểu 600 từ)
 - 5 điểm mạnh nên tận dụng, 5 điểm yếu phải phòng.
 - Các mốc tuổi quan trọng nhất.
-- Một "chiến lược đời" ngắn gọn: học gì, làm gì, cưới khi nào, tích lũy ra sao.
+- Một "chiến lược đời" cụ thể: học gì, làm gì, cưới khi nào, tích lũy ra sao.
 
-### VIII. Ghi chú phương pháp (ngắn)
-- Engine và các quy ước đã dùng.
+### VIII. Ghi chú phương pháp
+- Engine và các quy ước đã dùng. Hai lớp: Tam Hợp (TVCN, TVNL) và Tứ Hóa phái Khâm Thiên (KTTH, KTSC), dùng bảng tứ hóa của phái, tuổi Canh Khoa Âm Kỵ Đồng.
 - Những chỗ sách hoặc engine mâu thuẫn, và đã chọn theo hướng nào, vì sao.
 - Độ tin của từng phần.
 
@@ -214,8 +244,10 @@ Chính tinh và nghề thời nay. Đây là gợi ý, phải cân thêm độ s
 - [ ] Không có câu nào chỉ là nhãn sao, thiếu cơ chế, thời điểm và lời khuyên.
 - [ ] Không có mục "hạn chế: chưa tra…". Việc nào cần tra thì đã tra.
 - [ ] Mọi vị trí sao lấy từ `laso.py`, không tự nhẩm.
+- [ ] Mỗi phần đạt mức sàn số từ ở tiêu đề; toàn bài trên 10.000 từ (đếm bằng `wc -w`).
+- [ ] Phần I và mọi mục ở III, IV, V đều có lớp Tứ Hóa. Mỗi cờ trong KHUNG TỨ HÓA đã được tra thẻ và dùng, hoặc nói rõ vì sao bỏ. Đã chỉ ra chỗ hai lớp cùng chiều hay ngược chiều.
 
-## 7. Ví dụ về độ sâu (nam, 14/5/2001, 18h, Tân Tỵ)
+## 7. Ví dụ về độ sâu (lá số mẫu, đã ẩn danh)
 
 Bài luận **sai**: "Quan Lộc có Cự Môn Hóa Lộc: nghề dùng miệng lưỡi, có Lộc nên kiếm tiền được." Bài này đã bỏ sót những điểm sau.
 
@@ -233,7 +265,7 @@ Bài luận **sai**: "Quan Lộc có Cự Môn Hóa Lộc: nghề dùng miệng 
   - Kết luận: Đà ở đây *nửa đắc nửa hãm*. Tính lì, quả quyết, chịu đựng là thật. Mặt trái là chậm chạp, hay ôm việc, dễ vướng chuyện kéo dài. Thêm Tuần và Địa Kiếp (đắc), mặt phát giảm đi.
 - **Địa Kiếp (đắc) ở Mệnh, Địa Không (đắc) ở Di.** Cách "đắc tam không" chỉ dành cho Mệnh Hỏa (TVCN2 L1121, TT04 L562), không áp được ở đây. Với Mệnh Kim, Không Kiếp là trở lực (TT04 L552). Tuần đã che bớt, và Không Kiếp đắc nên thành tính dám nghĩ khác, dám làm. Rủi ro là các quyết định tiền bạc liều lĩnh.
 - **Âm nam, Mệnh ở cung dương nên nghịch lý; Mệnh ở vị trí Thiếu Âm.** Người thật thà, hay chịu thiệt. Lợi ích đến qua phúc tinh và người giúp, không đến qua tranh giành (TT09 L8-28; TT04 L363-367).
-- **Năm 2026.**
+- **Năm xem.**
   - Đại hạn ở Phu Thê (Ngọ, có Thiên Cơ miếu) trùng lưu Thái Tuế, lưu Kình Dương và lưu Hóa Quyền.
   - Tiểu hạn ở Mệnh có Đà (hãm) và Kiếp (đắc) tại chỗ. Thiên Hình và Hỏa Tinh (hãm) từ Quan chiếu về (vị trí Hỏa Tinh theo Bắc phái). Lưu Tang Môn và lưu Thiên Mã cũng ở Mệnh.
   - Năm động: đổi chỗ, đổi việc, có biến về tình cảm.
